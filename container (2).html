@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head lang="de">
+        <meta charset="UTF-8">
+        <title>Single-Page-App</title>
+    </head> 
+    <!--Grundriss überall gleich start-->
+    <header id="header_content"></header>  
+    <main id="main_content"></main>
+    <footer id="footer_content"></footer>
+    <!--Grundriss überall gleich zuende -->
+    
+    <!--Template Sektion Beginn-->
+    <div id="templates">
+        <!-- abgemeldet-->
+        <div id="abgemeldet">
+            <body>
+                <button name="login">
+                    anmelden
+                </button> 
+        </div>
+        <hr>
+        
+        <div id="header_angemeldet">
+            <button name="logout">
+                abmelden
+            </button>
+            <h3>Account: %username </h3>
+            <nav>
+                <ul>
+                    <li>%Blogname (%Postcount)</li>
+                </ul>
+            </nav>
+            <ul>
+                <li><h3>%blogname</h3></li>
+                <li>Posts: %postcount</li>
+                <li>letzte Änderung: %date_of_change</li>
+                <li>Erscheinungsdatum: %releasedate</li>
+                <li> <a href="url">link Link zur Google-Blogansicht (kommt noch)</a>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        
+        <!-- Startseite - eingeloggt -->
+        <div id="Blog-Übersicht">
+            <button name = "add"><img src="./pic/icons8-plus-64.png" alt="add"></button>
+            <!--Navigation an Postinhalten mit Kuzinfo gelistet-->
+            <nav>
+                <ul>
+                    <li>
+                        <article>
+                            <header>
+                                <h3>%Post_title</h3>
+                                <p>erstellt:%relasedate</p>
+                                <p>zuletzt geändert: %date_of_change</p>
+                                <p>Kommentare: %comment_count</p>
+                            </header>
+                            <body> </body>
+                            <footer>
+                                <nav>
+                                </nav>
+                            </footer>
+                        </article>
+                    </li>
+                </ul>
+        </div>
+        <hr>
+        
+        <!--Buttons-->
+        <div id="Buttons">
+            <ul>                             
+                <li><button data-path="/view/%id"><img src="./pic/icons8-view-64.png" alt="view"></button> </li>
+                <li><button data-path="/edit/%id"><img src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
+                <li><button id="post1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button></li>
+            </ul>
+
+        </div>
+        <hr>
+    
+        <!-- Grundriss für die Postansicht-->
+        <div id="Detailansicht">
+            <article id="post1">
+                <!--Headerinnerhalb der main section-->
+                <header>
+                    <h2>%Posttitle</h2>
+                    <p>Post erstellt am: %relasedate</p><br>
+                    <p>letzte Änderung: %date_of_change</p>
+                    <nav>
+                        <!--Buttons plotzhalter-->
+                    </nav>
+                </header>
+                <section>
+                    %Post_content
+                </section>
+            </article>
+            <h4>Kommentare:</h4>
+            <article>
+                <section>
+                    %comment_content
+                </section>
+                <footer>
+                    <!--Metacontent des Kommentars im Footer der Kommentsecion section -->
+                    <ul>
+                        <li>
+                            <p>%comment_user</p>
+                            <p>erstellt: relasedateof_comment</p>
+                            <nav>
+                                <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
+                            </nav>
+                        </li>
+                    </ul>
+                </footer>
+            </article>
+        </div>
+        <hr>
+               
+        <div id="footer_angemeldet">
+            <footer>
+                <h3>  Kontakt: %username, %useradress</h3>
+            </footer>
+        </div>
+        <hr>
+    </div>
+    <!--Template Sektion ende-->
+</html>
