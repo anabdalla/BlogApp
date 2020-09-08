@@ -16,14 +16,22 @@ const model = (function () {
     // Formatiert den Datum-String in date in zwei mögliche Datum-Strings: 
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
-    function formatDate(date, long) {
-        var newDate;
+  function formatDate(date, long) {
+       let newDate;
+        var langfassung={weekday:'long',year:'numeric',month:'long',day:'numeric',
+            hour:'numeric', minute:'numeric'};
+        var kurzfassung={year:'numeric',month:'2-digit',day:'2-digit'};
+        
         if (long == false) { //Kurzfassung
-            newDate = date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear();
+         
+           newDate= date.toLocaleDateString('de-DE',kurzfassung);
         }
-        if (long == true) { //Langfassung TODO!!!!
-            newDate = date.getDay() + ", " + date.getDate() + ". " + date.getMonth() + " " + date. getFullYear(); + ", " + date.getHours() + "." + date.getMinutes();
+        if (long == true) { 
+            //Langfassung TODO!!
+           newDate= date.toLocaleDateString('de-DE',langfassung);
         }
+        
+        
         return newDate;
     }
     
