@@ -16,8 +16,8 @@ const model = (function () {
     // Formatiert den Datum-String in date in zwei mögliche Datum-Strings: 
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
-  function formatDate(date, long) {
-       let newDate;
+    function formatDate(date, long) {
+  let newDate;
         var langfassung={weekday:'long',year:'numeric',month:'long',day:'numeric',
             hour:'numeric', minute:'numeric'};
         var kurzfassung={year:'numeric',month:'2-digit',day:'2-digit'};
@@ -34,18 +34,21 @@ const model = (function () {
         
         return newDate;
     }
-    
+       
     // Konstruktoren für Daten-Objekte
-    function blog (id, name, postcount, change, release, URL) {
-        this.id = id;
+   // Konstruktoren für Daten-Objekte
+    function Blog (id,name,count,change,release,URL) {
+        this.id=id;
         this.blogName = name;
-        this.postCount = postcount;
+        this.postCount = count;
         this.lastChange = change;
         this.releaseDate = release;
         this.URL = URL;   
     }
     
-    function post (id, bid, title, change, release, content, comments) {
+    Blog.prototype=
+    
+    function Post (id, bid, title, change, release, content, comments) {
         this.id = id;
         this.bid = bid;
         this.postName = title;
@@ -55,7 +58,7 @@ const model = (function () {
         this.commentCount = comments;
     }
     
-    function comment (id, bid, pid, name, change, release, content) {
+    function Comment (id, bid, pid, name, change, release, content) {
         this.id = id;
         this.bid = bid;
         this.pid = pid;
@@ -64,7 +67,6 @@ const model = (function () {
         this.releaseDate = release;
         this.commentContent = content;
     }
-   
 
     // Oeffentliche Methoden
     return {
@@ -96,7 +98,12 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                callback(result.items);
+          
+               
+          let neu= new Blog(result.items[0].id,result.items[0].name,result.items[0].posts.totalItems,result.items[0].updated,result.items[0].published,result.items[0].url);
+        
+      
+                callback(Object.entries(neu));
             });
         },
 
@@ -108,7 +115,8 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                callback(result);
+            let neu= new Blog(result.items[0].id,result.items[0].name,result.items[0].posts.totalItems,result.items[0].updated,result.items[0].published,result.items[0].url);
+                callback(neu);
             });
         },
 
@@ -119,7 +127,8 @@ const model = (function () {
                 'path': pathBlogs + "/" + bid + '/posts'
             });
 
-            request.execute((result) => {
+            request.execute((result) => { 
+           //    let neu= new Post(result.items[0].id,bid,result.items[0].title,result.items[0].published,result.items[0].updated,result.items[0].content, result.items[0].replies.totalItems);
                 callback(result.items);
             });
         },
@@ -132,7 +141,8 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                callback(result);
+               
+                callback(result.items);
             });
         },
 
@@ -145,6 +155,7 @@ const model = (function () {
             });
 
             request.execute((result) => {
+             
                 callback(result.items);
             });
         },
@@ -220,6 +231,3 @@ const model = (function () {
         }
     };
 })();
-
-
-

@@ -11,24 +11,23 @@
         <script src="./js/presenter.js" defer></script>
         <script src="./js/router.js" defer></script>
     </head> 
+    <body>
     <!--Grundriss überall gleich start-->
-    <header id="header_content"></header>  
+    <header id="header_content"></header> 
     <main id="main_content"></main>
     <footer id="footer_content"></footer>
     <!--Grundriss überall gleich zuende -->
-    
     <!--Template Sektion Beginn-->
     <div id="templates">
         <!-- abgemeldet-->
         <div id="abgemeldet">
-            <body>
                 <button id="sign-in-or-out-button"> Anmelden </button>
         </div>
         <hr>
         
         <div id="header_angemeldet">
             <button id="sign-in-or-out-button"> Abmelden </button>
-            <h3>Account: %userName </h3>
+            <p>Account: %userName <p>
             <nav>
                 <ul>
                     <li>%blogName (%postCount)</li>
@@ -67,6 +66,7 @@
                         </article>
                     </li>
                 </ul>
+            </nav>
         </div>
         <hr>
         
@@ -90,7 +90,7 @@
                     <p>Post erstellt am: %relaseDate</p>
                     <p>letzte Änderung: %lastChange</p>
                     <nav>
-                        <!--Buttons plotzhalter-->
+                        <!--Buttons platzhalter-->
                     </nav>
                 </header>
                 <section>
@@ -127,5 +127,6 @@
         <hr>
     </div>
     <!--Template Sektion ende-->
+    </body>
 </html>
 
