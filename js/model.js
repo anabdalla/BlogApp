@@ -78,7 +78,7 @@ const model = (function () {
         isLoggedIn(){
             return loggedIn;
         },
-        // Liefert den angemeldeten Nutzer mit allen Infos
+        // Liefert den angemeldeten Nutzer mit allen Infos Nssra
         getSelf(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -90,7 +90,7 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Blogs des angemeldeten Nutzers
+        // Liefert alle Blogs des angemeldeten Nutzers Nssra
         getAllBlogs(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -107,7 +107,7 @@ const model = (function () {
             });
         },
 
-        // Liefert den Blog mit der Blog-Id bid
+        // Liefert den Blog mit der Blog-Id bid Nssra
         getBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -120,7 +120,7 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Posts zu der  Blog-Id bid
+        // Liefert alle Posts zu der  Blog-Id bid Toni
         getAllPostsOfBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -133,7 +133,7 @@ const model = (function () {
             });
         },
 
-        // Liefert den Post mit der Post-Id pid im Blog mit der Blog-Id bid
+        // Liefert den Post mit der Post-Id pid im Blog mit der Blog-Id bid Toni
         getPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -146,8 +146,8 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Kommentare zu dem Post mit der Post-Id pid 
-        // im Blog mit der Blog-Id bid
+        // Liefert alle Kommentare zu dem Post mit der Post-Id pid Toni
+        // im Blog mit der Blog-Id bid 
         getAllCommentsOfPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
