@@ -10,55 +10,54 @@ const model = (function () {
 
     let pathGetBlogs = 'blogger/v3/users/self/blogs';
     let pathBlogs = 'blogger/v3/blogs';
-    
+
     // Private Funktionen 
 
     // Formatiert den Datum-String in date in zwei mögliche Datum-Strings: 
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
     function formatDate(date, long) {
-  let newDate;
-        var langfassung={weekday:'long',year:'numeric',month:'long',day:'numeric',
-            hour:'numeric', minute:'numeric'};
-        var kurzfassung={year:'numeric',month:'2-digit',day:'2-digit'};
-        
+        let newDate;
+        var langfassung = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+            hour: 'numeric', minute: 'numeric'};
+        var kurzfassung = {year: 'numeric', month: '2-digit', day: '2-digit'};
+
         if (long == false) { //Kurzfassung
-         
-           newDate= date.toLocaleDateString('de-DE',kurzfassung);
+
+            newDate = date.toLocaleDateString('de-DE', kurzfassung);
         }
-        if (long == true) { 
+        if (long == true) {
             //Langfassung TODO!!
-           newDate= date.toLocaleDateString('de-DE',langfassung);
+            newDate = date.toLocaleDateString('de-DE', langfassung);
         }
-        
-        
+
+
         return newDate;
     }
-       
+
     // Konstruktoren für Daten-Objekte
-   // Konstruktoren für Daten-Objekte
-    function Blog (id,name,count,change,release,URL) {
-        this.id=id;
+    // Konstruktoren für Daten-Objekte
+    function Blog(id, name, count, change, release, URL) {
+        this.id = id;
         this.blogName = name;
         this.postCount = count;
         this.lastChange = change;
         this.releaseDate = release;
-        this.URL = URL;   
+        this.URL = URL;
     }
-    
-    Blog.prototype=
-    
-    function Post (id, bid, title, change, release, content, comments) {
-        this.id = id;
-        this.bid = bid;
-        this.postName = title;
-        this.lastChange = change;
-        this.releaseDate = release;
-        this.postContent = content;
-        this.commentCount = comments;
-    }
-    
-    function Comment (id, bid, pid, name, change, release, content) {
+
+    Blog.prototype =
+            function Post(id, bid, title, change, release, content, comments) {
+                this.id = id;
+                this.bid = bid;
+                this.postName = title;
+                this.lastChange = change;
+                this.releaseDate = release;
+                this.postContent = content;
+                this.commentCount = comments;
+            };
+
+    function Comment(id, bid, pid, name, change, release, content) {
         this.id = id;
         this.bid = bid;
         this.pid = pid;
@@ -71,11 +70,11 @@ const model = (function () {
     // Oeffentliche Methoden
     return {
         // Setter für loggedIn
-        setLoggedIn(b){
+        setLoggedIn(b) {
             loggedIn = b;
         },
         // Getter für loggedIn
-        isLoggedIn(){
+        isLoggedIn() {
             return loggedIn;
         },
         // Liefert den angemeldeten Nutzer mit allen Infos Nssra
@@ -98,12 +97,13 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-          
-               
-          let neu= new Blog(result.items[0].id,result.items[0].name,result.items[0].posts.totalItems,result.items[0].updated,result.items[0].published,result.items[0].url);
-        
-      
-                callback(Object.entries(neu));
+
+
+                let neu = new Blog(result.items[0].id, result.items[0].name, result.items[0].posts.totalItems, result.items[0].updated, result.items[0].published, result.items[0].url);
+
+
+                // callback(Object.entries(neu)); // TODO
+                callback(result.items);
             });
         },
 
@@ -115,7 +115,7 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-            let neu= new Blog(result.items[0].id,result.items[0].name,result.items[0].posts.totalItems,result.items[0].updated,result.items[0].published,result.items[0].url);
+                let neu = new Blog(result.items[0].id, result.items[0].name, result.items[0].posts.totalItems, result.items[0].updated, result.items[0].published, result.items[0].url);
                 callback(neu);
             });
         },
@@ -127,8 +127,8 @@ const model = (function () {
                 'path': pathBlogs + "/" + bid + '/posts'
             });
 
-            request.execute((result) => { 
-           //    let neu= new Post(result.items[0].id,bid,result.items[0].title,result.items[0].published,result.items[0].updated,result.items[0].content, result.items[0].replies.totalItems);
+            request.execute((result) => {
+                //    let neu= new Post(result.items[0].id,bid,result.items[0].title,result.items[0].published,result.items[0].updated,result.items[0].content, result.items[0].replies.totalItems);
                 callback(result.items);
             });
         },
@@ -141,7 +141,7 @@ const model = (function () {
             });
 
             request.execute((result) => {
-               
+
                 callback(result.items);
             });
         },
@@ -155,7 +155,7 @@ const model = (function () {
             });
 
             request.execute((result) => {
-             
+
                 callback(result.items);
             });
         },

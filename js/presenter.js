@@ -31,7 +31,13 @@ const presenter = (function () {
             for (let b of blogs) {
                 console.log(b);
             }
-            blogId = blogs[0].id
+            blogId = blogs[0].id;
+            // hierhin verschoben!
+            // Das muss später an geeigneter Stelle in Ihren Code hinein.
+            init = true;
+            //Falls auf Startseite, navigieren zu Uebersicht
+            if (window.location.pathname === "/")
+            router.navigateToPage('/blogOverview/' + blogId);
             model.getAllPostsOfBlog(blogId, (posts) => {
                 console.log("--------------- Alle Posts des ersten Blogs --------------- ");
                 if (!posts)
@@ -51,11 +57,7 @@ const presenter = (function () {
             });
         });
         
-        // Das muss später an geeigneter Stelle in Ihren Code hinein.
-        init = true;
-        //Falls auf Startseite, navigieren zu Uebersicht
-        if (window.location.pathname === "/")
-            router.navigateToPage('/blogOverview/' + blogId);
+        
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
