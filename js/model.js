@@ -21,22 +21,16 @@ const model = (function () {
         var langfassung = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
             hour: 'numeric', minute: 'numeric'};
         var kurzfassung = {year: 'numeric', month: '2-digit', day: '2-digit'};
-
-        if (long == false) { //Kurzfassung
-
+        if (long === false) { //Kurzfassung
             newDate = date.toLocaleDateString('de-DE', kurzfassung);
         }
-        if (long == true) {
-            //Langfassung TODO!!
+        if (long === true) { //Langfassung
             newDate = date.toLocaleDateString('de-DE', langfassung);
         }
-
-
         return newDate;
     }
 
-    // Konstruktoren für Daten-Objekte
-    // Konstruktoren für Daten-Objekte
+    // Konstruktoren für Daten-Objekte Blog, Post, Comment
     function Blog(id, name, count, change, release, URL) {
         this.id = id;
         this.blogName = name;
@@ -46,16 +40,15 @@ const model = (function () {
         this.URL = URL;
     }
 
-    Blog.prototype =
-            function Post(id, bid, title, change, release, content, comments) {
-                this.id = id;
-                this.bid = bid;
-                this.postName = title;
-                this.lastChange = change;
-                this.releaseDate = release;
-                this.postContent = content;
-                this.commentCount = comments;
-            };
+    function Post(id, bid, title, change, release, content, comments) {
+        this.id = id;
+        this.bid = bid;
+        this.postName = title;
+        this.lastChange = change;
+        this.releaseDate = release;
+        this.postContent = content;
+        this.commentCount = comments;
+    }
 
     function Comment(id, bid, pid, name, change, release, content) {
         this.id = id;
@@ -128,8 +121,14 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                //    let neu= new Post(result.items[0].id,bid,result.items[0].title,result.items[0].published,result.items[0].updated,result.items[0].content, result.items[0].replies.totalItems);
-                callback(result.items);
+                let arr = [];   // Array erstellen
+                for (let p of result.items) { // Posts einfügen
+                    if (p !== undefined) {
+                        // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
+                        arr.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
+                    }
+                }
+                callback(arr);  // gewünschte Funktion auf Array ausführen
             });
         },
 
@@ -141,8 +140,8 @@ const model = (function () {
             });
 
             request.execute((result) => {
-
-                callback(result.items);
+                let post = new Post(result.id, result.blog.id, result.title, result.updated, result.published, result.content, result.replies.totalItems);
+                callback(post);
             });
         },
 
@@ -155,8 +154,11 @@ const model = (function () {
             });
 
             request.execute((result) => {
-
-                callback(result.items);
+                let arr = [];
+                for (let c of result) {
+                    arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
+                }
+                callback(arr);
             });
         },
 
