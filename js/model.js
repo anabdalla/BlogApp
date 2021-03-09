@@ -82,7 +82,7 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Blogs des angemeldeten Nutzers Nssra
+        // Liefert alle Blogs des angemeldeten Nutzers 
         getAllBlogs(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -90,17 +90,14 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-
-
-                let neu = new Blog(result.items[0].id, result.items[0].name, result.items[0].posts.totalItems, result.items[0].updated, result.items[0].published, result.items[0].url);
-
-
-                // callback(Object.entries(neu)); // TODO
-                callback(result.items);
+                let arrB=[];
+                for(let b of result.items)
+                arrB.push(new Blog(b.id, b.name, b.posts.totalItems, b.updated, b.published, b.url));
+                callback(arrB);
             });
         },
 
-        // Liefert den Blog mit der Blog-Id bid Nssra
+        // Liefert den Blog mit der Blog-Id bid 
         getBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -108,8 +105,9 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                let neu = new Blog(result.items[0].id, result.items[0].name, result.items[0].posts.totalItems, result.items[0].updated, result.items[0].published, result.items[0].url);
-                callback(neu);
+                let arrB=[];
+                arrB.push(new Blog(result.id, result.name, result.posts.totalItems, result.updated, result.published, result.url));
+                callback(arrB);
             });
         },
 
@@ -122,7 +120,7 @@ const model = (function () {
 
             request.execute((result) => {
                 let arr = [];   // Array erstellen
-                for (let p of result.items) { // Posts einfügen
+                for (let p of result.items) {// Posts einfügen
                     if (p !== undefined) {
                         // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
                         arr.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
@@ -154,11 +152,12 @@ const model = (function () {
             });
 
             request.execute((result) => {
+                if(result[0]!== undefined){
                 let arr = [];
-                for (let c of result) {
+                for (let c of result.items) {
                     arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
                 }
-                callback(arr);
+                callback(arr);}
             });
         },
 
