@@ -16,6 +16,7 @@ const model = (function () {
     // Formatiert den Datum-String in date in zwei mögliche Datum-Strings: 
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
+    // -> Aufruf setFormatDates() in Prototypen
     function formatDate(date, long) {
         let newDate;
         var langfassung = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -38,6 +39,10 @@ const model = (function () {
         this.lastChange = change;
         this.releaseDate = release;
         this.URL = URL;
+        this.setFormatDates = function (long) {
+            this.shortDate = formatDate(long, false);
+            this.longDate = formatDate(long, true);
+        };
     }
 
     function Post(id, bid, title, change, release, content, comments) {
@@ -48,6 +53,10 @@ const model = (function () {
         this.releaseDate = release;
         this.postContent = content;
         this.commentCount = comments;
+        this.setFormatDates = function (long) {
+            this.shortDate = formatDate(long, false);
+            this.longDate = formatDate(long, true);
+        };
     }
 
     function Comment(id, bid, pid, name, change, release, content) {
@@ -58,6 +67,10 @@ const model = (function () {
         this.lastChange = change;
         this.releaseDate = release;
         this.commentContent = content;
+        this.setFormatDates = function (long) {
+            this.shortDate = formatDate(long, false);
+            this.longDate = formatDate(long, true);
+        };
     }
 
     // Oeffentliche Methoden
@@ -228,7 +241,6 @@ const model = (function () {
                 'method': 'DELETE',
                 'path': path
             });
-
             request.execute(callback);
         }
     };
