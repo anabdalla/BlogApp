@@ -5,11 +5,12 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script async defer src="https://apis.google.com/js/api.js"></script>
-        <title>BLOGGER</title>
+        <title>Mein Blogger</title>
         <script src="./js/login.js" defer></script>
         <script src="./js/model.js" defer></script>
         <script src="./js/presenter.js" defer></script>
         <script src="./js/router.js" defer></script>
+        <script src="./js/view.js" defer></script>
     </head> 
     <body>
     <!--Grundriss überall gleich start-->
@@ -17,8 +18,9 @@
     <main id="main_content"></main>
     <footer id="footer_content"></footer>
     <!--Grundriss überall gleich zuende -->
+    
     <!--Template Sektion Beginn-->
-    <div id="templates">
+    <div id="templates" hidden>
         <!-- abgemeldet-->
         <div id="abgemeldet">
                 <button id="sign-in-or-out-button"> Anmelden </button>
@@ -30,9 +32,10 @@
             <p>Account: %userName <p>
             <nav>
                 <ul>
-                    <li>%blogName (%postCount)</li>
+                    <li>%blogName (%postCount Posts)</li>
                 </ul>
             </nav>
+            // vllt. nav um die ul setzen?
             <ul>
                 <li><p>%blogName</p></li>
                 <li>Posts: %postCount</li>
@@ -46,6 +49,7 @@
         
         <!-- Startseite - eingeloggt -->
         <div id="Blog-Übersicht">
+            // Button evtl. in das div mit den anderen Buttons verschieben?
             <button name = "add"><img src="./pic/icons8-plus-64.png" alt="add"></button>
             <!--Navigation an Postinhalten mit Kuzinfo gelistet-->
             <nav>
@@ -54,13 +58,13 @@
                         <article>
                             <header>
                                 <h3>%postName</h3>
-                                <p>erstellt:%relaseDate</p>
-                                <p>zuletzt geändert: %lastChange</p>
+                                <p>erstellt:%relaseDate (Kurzfassung)</p>
+                                <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
                                 <p>Kommentare: %commentCount</p>
                             </header>
-                            <section></section>
+                            <section></section> // ??? sollen die Meta-Daten im header bleiben oder in die section?
                             <footer>
-                                <nav>
+                                <nav> // hier werden die Buttons zur Laufzeit eingesetzt
                                 </nav>
                             </footer>
                         </article>
@@ -71,7 +75,7 @@
         <hr>
         
         <!--Buttons-->
-        <div id="Buttons">
+        <div id="Buttons"> // Button zum anlegen eines Posts steht momentan noch oben
             <ul>                             
                 <li><button data-path="/view/%id"><img src="./pic/icons8-view-64.png" alt="view"></button> </li>
                 <li><button data-path="/edit/%id"><img src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
@@ -84,7 +88,7 @@
         <!-- Grundriss für die Postansicht-->
         <div id="Detailansicht">
             <article id="post">
-                <!--Headerinnerhalb der main section-->
+                <!--Header innerhalb der main section-->
                 <header>
                     <p>%postName<p>
                     <p>Post erstellt am: %relaseDate</p>
@@ -99,6 +103,7 @@
             </article>
             <p>Kommentare: %commentCount</p>
             <article>
+                // Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)?
                 <section>
                     %commentContent
                 </section>
@@ -129,4 +134,3 @@
     <!--Template Sektion ende-->
     </body>
 </html>
-
