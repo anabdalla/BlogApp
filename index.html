@@ -2,7 +2,7 @@
 <html>
     <head lang="de">
         <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script async defer src="https://apis.google.com/js/api.js"></script>
         <title>Mein Blogger</title>
@@ -13,124 +13,127 @@
         <script src="./js/view.js" defer></script>
     </head> 
     <body>
-    <!--Grundriss überall gleich start-->
-    <header id="header_content"></header> 
-    <main id="main_content"></main>
-    <footer id="footer_content"></footer>
-    <!--Grundriss überall gleich zuende -->
-    
-    <!--Template Sektion Beginn-->
-    <div id="templates" hidden>
-        <!-- abgemeldet-->
-        <div id="abgemeldet">
-                <button id="sign-in-or-out-button"> Anmelden </button>
-        </div>
-        <hr>
-        
-        <div id="header_angemeldet">
-            <button id="sign-in-or-out-button"> Abmelden </button>
-            <p>Account: %userName <p>
-            <nav>
-                <ul>
-                    <li>%blogName (%postCount Posts)</li>
-                </ul>
-            </nav>
-            // vllt. nav um die ul setzen?
-            <ul>
-                <li><p>%blogName</p></li>
-                <li>Posts: %postCount</li>
-                <li>letzte Änderung: %lastChange</li>
-                <li>Erscheinungsdatum: %releaseDate</li>
-                <li> <a href="url">%URL</a>
-                </li>
-            </ul>
-        </div>
-        <hr>
-        
-        <!-- Startseite - eingeloggt -->
-        <div id="Blog-Übersicht">
-            // Button evtl. in das div mit den anderen Buttons verschieben?
-            <button name = "add"><img src="./pic/icons8-plus-64.png" alt="add"></button>
-            <!--Navigation an Postinhalten mit Kuzinfo gelistet-->
-            <nav>
-                <ul>
-                    <li>
-                        <article>
-                            <header>
-                                <h3>%postName</h3>
-                                <p>erstellt:%relaseDate (Kurzfassung)</p>
-                                <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
-                                <p>Kommentare: %commentCount</p>
-                            </header>
-                            <section></section> // ??? sollen die Meta-Daten im header bleiben oder in die section?
-                            <footer>
-                                <nav> // hier werden die Buttons zur Laufzeit eingesetzt
-                                </nav>
-                            </footer>
-                        </article>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <hr>
-        
-        <!--Buttons-->
-        <div id="Buttons"> // Button zum anlegen eines Posts steht momentan noch oben
-            <ul>                             
-                <li><button data-path="/view/%id"><img src="./pic/icons8-view-64.png" alt="view"></button> </li>
-                <li><button data-path="/edit/%id"><img src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
-                <li><button id="post1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button></li>
-            </ul>
+        <!--Grundriss überall gleich start-->
+        <header id="header_content"></header> // wird zu Beginn in initPage() befüllt
+        <main id="main_content"></main>
+        <footer id="footer_content"></footer> // wird zu Beginn in initPage() befüllt
+        <!--Grundriss überall gleich zuende -->
 
-        </div>
-        <hr>
-    
-        <!-- Grundriss für die Postansicht-->
-        <div id="Detailansicht">
-            <article id="post">
-                <!--Header innerhalb der main section-->
-                <header>
-                    <p>%postName<p>
-                    <p>Post erstellt am: %relaseDate</p>
-                    <p>letzte Änderung: %lastChange</p>
-                    <nav>
-                        <!--Buttons platzhalter-->
-                    </nav>
-                </header>
-                <section>
-                    %postContent
+        <!--Template Sektion Beginn-->
+        <div id="templates" hidden>
+            <!-- abgemeldet-->
+            <div id="abgemeldet">
+                <button id="sign-in-or-out-button"> Anmelden </button>
+            </div>
+            <hr>
+
+            <div id="header_angemeldet">
+                <button id="sign-in-or-out-button"> Abmelden </button>
+                <p>angemeldet als: %userName <p>
+                <nav>
+                    <ul> 
+                        <li>%blogName (%postCount Posts)</li> 
+                    </ul>
+                </nav>
+                // vllt. nav um die ul setzen?
+                <section> 
+                    <ul>
+                        <li><p>%blogName</p></li>
+                        <li>Posts: %postCount</li>
+                        <li>letzte Änderung: %lastChange (Kurzfassung)</li>
+                        <li>Erscheinungsdatum: %releaseDate (Kurzfassung)</li>
+                        <li> <a href="url">%URL</a></li>
+                    </ul>
                 </section>
-            </article>
-            <p>Kommentare: %commentCount</p>
-            <article>
-                // Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)?
-                <section>
-                    %commentContent
-                </section>
-                <footer>
-                    <!--Metacontent des Kommentars im Footer der Kommentsection section -->
+            </div>
+            <hr>
+
+            <!-- Startseite - eingeloggt -->
+            <div id="Blog-Übersicht">
+                // Button evtl. in das div mit den anderen Buttons verschieben?
+                <button name = "add"><img src="./pic/icons8-plus-64.png" alt="add"></button>
+                <!--Navigation an Postinhalten mit Kuzinfo gelistet-->
+                <nav>
                     <ul>
                         <li>
-                            <p>%writer</p>
-                            <p>letzte Änderung: %lastChange</p>
-                            <p>erstellt: %releaseDate</p>
-                            <nav>
-                                <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
-                            </nav>
+                            <article>
+                                <header>
+                                    <h3>%postName</h3>
+                                    <p>erstellt:%relaseDate (Kurzfassung)</p>
+                                    <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
+                                    <p>Kommentare: %commentCount</p>
+                                </header>
+                                <section></section> // ??? sollen die Meta-Daten im header bleiben oder in die section?
+                                <footer>
+                                    <nav> // hier werden die Buttons zur Laufzeit eingesetzt
+                                    </nav>
+                                </footer>
+                            </article>
                         </li>
                     </ul>
+                </nav>
+            </div>
+            <hr>
+
+            <!--Buttons-->
+            <div id="Buttons"> // Button zum anlegen eines Posts steht momentan noch oben
+                <ul>                             
+                    <li><button data-path="/view/%id"><img src="./pic/icons8-view-64.png" alt="view"></button> </li>
+                    <li><button data-path="/edit/%id"><img src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
+                    <li><button id="post1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button></li>
+                </ul>
+
+            </div>
+            <hr>
+
+            <!-- Grundriss für die Postansicht-->
+            <div id="Detailansicht">
+                <article id="post">
+                    <!--Header innerhalb der main section-->
+                    <header>
+                        <p>%postName<p>
+                        <p>Post erstellt am: %relaseDate</p>
+                        <p>letzte Änderung: %lastChange</p>
+                        <nav>
+                            <!--Buttons platzhalter-->
+                        </nav>
+                    </header>
+                    <section>
+                        %postContent
+                    </section>
+                </article>
+                <p>Kommentare: %commentCount</p>
+                <article>
+                    // Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)?
+                    <section>
+                        %commentContent
+                    </section>
+                    <footer>
+                        <!--Metacontent des Kommentars im Footer der Kommentsection section -->
+                        <ul>
+                            <li>
+                                <p>geschrieben von: %writer</p>
+                                <p>letzte Änderung: %lastChange</p>
+                                <p>erstellt: %releaseDate</p>
+                                <nav>
+                                    <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
+                                </nav>
+                            </li>
+                        </ul>
+                    </footer>
+                </article>
+            </div>
+            <hr>
+
+            <div id="footer_angemeldet">
+                <footer>
+                    <p>  Account: %userName</p>
+                    <p>  URL: <a href="url">%userAddress</a> <</p>
                 </footer>
-            </article>
+            </div>
+            <hr>
         </div>
-        <hr>
-               
-        <div id="footer_angemeldet">
-            <footer>
-                <p>  Kontakt: %userName, %userAdress</p>
-            </footer>
-        </div>
-        <hr>
-    </div>
-    <!--Template Sektion ende-->
+        <!--Template Sektion ende-->
     </body>
 </html>
+

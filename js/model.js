@@ -95,7 +95,7 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Blogs des angemeldeten Nutzers 
+        // Liefert Array mit allen Blogs des angemeldeten Nutzers 
         getAllBlogs(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -110,7 +110,7 @@ const model = (function () {
             });
         },
 
-        // Liefert den Blog mit der Blog-Id bid 
+        // Liefert Array mit dem Blog mit der Blog-Id bid 
         getBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -124,7 +124,7 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Posts zu der  Blog-Id bid Toni
+        // Liefert Array mit allen Posts zu der  Blog-Id bid Toni
         getAllPostsOfBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -132,18 +132,18 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                let arr = [];   // Array erstellen
+                let arrP = [];   // Array erstellen
                 for (let p of result.items) {// Posts einfügen
                     if (p !== undefined) {
                         // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
-                        arr.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
+                        arrP.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
                     }
                 }
-                callback(arr);  // gewünschte Funktion auf Array ausführen
+                callback(arrP);  // gewünschte Funktion auf Array ausführen
             });
         },
 
-        // Liefert den Post mit der Post-Id pid im Blog mit der Blog-Id bid Toni
+        // Liefert Array mit dem Post mit der Post-Id pid im Blog mit der Blog-Id bid Toni
         getPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -151,8 +151,10 @@ const model = (function () {
             });
 
             request.execute((result) => {
+                let arrP = [];
                 let post = new Post(result.id, result.blog.id, result.title, result.updated, result.published, result.content, result.replies.totalItems);
-                callback(post);
+                arrP.push(post);
+                callback(arrP);
             });
         },
 
