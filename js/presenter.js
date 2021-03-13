@@ -14,73 +14,48 @@ const presenter = (function () {
 
     // Initialisiert die allgemeinen Teile der Seite: header und footer
     function initPage() {
-        // beim Erstbesuch der Seite werden die Informationen, die auf jeder Seite zu sehen sein sollen, eingesetzt
-        // in unserem Fall: alles aus div 'header_angemeldet' im Header und div 'footer_angemeldet' im Footer
         console.log("Presenter: Aufruf von initPage()");
+        document.getElementById('main_content').innerHTML = "";
         // FOOTER INITIALISIEREN:
         // Nutzer abfragen und an render-Methode des Footers übergeben, Namen als owner speichern
         model.getSelf((result) => {
-            owner = result.displayName; // scheint noch nicht zu klappen
+            owner = result.displayName; // scheint noch nicht zu klappen -> Laufzeitproblem??
             console.log(`Presenter: Nutzer*in ${owner} hat sich angemeldet.`);
             // den einzusetzenden div-Knoten von der render-Methode zurückliefern lassen
             let pageFooter = footer.render(result);
             // Footer befüllen
             replace('footer_content', pageFooter);
         });
-
         // HEADER INITIALISIEREN:
         // Blogs abfragen und an die render-Methode des Headers übergeben
         model.getAllBlogs((blogs) => {
-            // den einzusetzenden div-Knoten von der render-Methode zurückliefern lassen
-            let pageHeader = header.render(blogs);
-            // Header befüllen
-            replace('header_content', pageHeader);
-            
-            // MAIN INITIALISIEREN:
-            // zu Beginn soll die BlogOverview des zuletzt geänderten Blogs eingefügt werden
-            let latestChange = blogs[0]; // den zuletzt aktualisierten Blog finden
+            // den zuletzt aktualisierten Blog finden (für die BlogInfo)
+            let latestChange = blogs[0];
             for (let b of blogs) { // dazu müssen die Blogs verglichen werden
                 if (b.lastChange < latestChange.lastChange) { // prüfen, ob Aktualisierung jünger als die des bisher gespeicherten Blogs ist
                     latestChange = b; // wenn ja, den aktuelleren Blog in Variable speichern
+                    blogId = b.id;
                 }
             }
-            // TODO richtiger Aufruf -> BlogOverview des Blogs latestChange in 'main_content' einfügen
+            // den einzusetzenden div-Knoten von der render-Methode zurückliefern lassen
+            let pageHeader = header.render(blogs, latestChange);
+            // ausgefüllten Header einsetzen
+            replace('header_content', pageHeader);
+            // MAIN INITIALISIEREN:
+            // BlogOverview des Blogs latestChange in 'main_content' einfügen
+            model.getAllPostsOfBlog(latestChange.id, (posts) => {
+                let pageMain = blogOverview.render(latestChange, posts);
+                replace('main_content', pageMain);
+            });
         });
+        // Eventhandler setzen
+        let head = document.getElementById('header_content');
+        head.addEventListener("click", handleClicks);
+        let main = document.getElementById('main_content');
+        main.addEventListener("click", handleClicks);
+        let foot = document.getElementById('footer_content');
+        foot.addEventListener("click", handleClicks);
         init = true; // Initialisierung ist erfolgt
-        
-//        // Hier werden zunächst nur zu Testzwecken Daten vom Model abgerufen und auf der Konsole ausgegeben     
-//        model.getAllBlogs((blogs) => {
-//            console.log("--------------- Alle Blogs --------------- ");
-//            if (!blogs)
-//                return;
-//            for (let b of blogs) {
-//                console.log(b);
-//            }
-//            blogId = blogs[0].id;
-//            // -> hierhin verschoben! Das muss später an geeigneter Stelle in Ihren Code hinein.
-//            init = true;
-//            //Falls auf Startseite, navigieren zu Uebersicht
-//            if (window.location.pathname === "/")
-//                router.navigateToPage('/blogOverview/' + blogId);
-//            model.getAllPostsOfBlog(blogId, (posts) => {
-//                console.log("--------------- Alle Posts des ersten Blogs --------------- ");
-//                if (!posts)
-//                    return;
-//                for (let p of posts) {
-//                    console.log(p);
-//                }
-//                postId = posts[1].id;
-//                model.getAllCommentsOfPost(blogId, postId, (comments) => {
-//                    console.log("--------------- Alle Comments des zweiten Post --------------- ");
-//                    if (!comments)
-//                        return;
-//                    for (let c of comments) {
-//                        console.log(c);
-//                    }
-//                });
-//            });
-//        });
-
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
@@ -92,6 +67,13 @@ const presenter = (function () {
         blogId = -1;
         postId = -1;
         owner = undefined;
+        // im main-Bereich soll der Anmeldebutton erscheinen
+        let page = document.getElementById("abgemeldet").cloneNode(true);
+        page.removeAttribute("id");
+        replace('main_content', page);
+        // die Bereiche header und footer sollen leer sein
+        document.getElementById('header_content').innerHTML = "";
+        document.getElementById('footer_content').innerHTML = "";
     }
 
     function replace(id, element) {
@@ -104,6 +86,27 @@ const presenter = (function () {
         }
     }
 
+    function handleClicks(event) {
+        let source = null;
+        // behandelte Click-Möglichkeiten: a-Tags, Buttons, Listenelemente
+        switch (event.target.tagName) {
+            case "A":
+                event.preventDefault();
+                source = event.target;
+                break;
+            case "BUTTON":
+                source = event.target;
+                break;
+            default:
+                source = event.target.closest("LI");
+                break;
+        }
+        if (source) {
+            let path = source.dataset.path;
+            if (path)
+                router.navigateToPage(path);
+        }
+    }
 
     //Oeffentliche Methoden
     return {
@@ -113,25 +116,33 @@ const presenter = (function () {
             // Wenn vorher noch nichts angezeigt wurde, d.h. beim Einloggen
             if (model.isLoggedIn()) { // Wenn der Nutzer eingeloggt ist
                 initPage();
+                // zur Blogübersicht des Blogs navigieren
+                //router.navigateToPage("/blog-overview/%bid");
             }
-            if (!model.isLoggedIn()) { // Wenn der Nuzter eingelogged war und sich abgemeldet hat
-                //Hier wird die Seite ohne Inhalt angezeigt
+            if (!model.isLoggedIn()) {
                 loginPage();
             }
         },
 
-        // TODO
         // Wird vom Router aufgerufen, wenn eine Blog-Übersicht angezeigt werden soll
         showBlogOverview(bid) {
-            console.log(`Aufruf von presenter.showBlogOverview(${blogId})`);
+            console.log(`Aufruf von presenter.showBlogOverview(Blog ${blogId})`);
+            if (!init)
+                initPage();  // Fehlervermeidung
+            model.getBlog(bid, (blog) => {
+                model.getAllPostsOfBlog(blog.id, (posts) => {
+                    let page = blogOverview.render(blog, posts);
+                    replace('main_content', page);
+                });
+            });
         },
 
         showDetailView(bid, pid) {
-            console.log(`Aufruf von presenter.showDetailView(${blogId}, ${postId})`);
+            console.log(`Aufruf von presenter.showDetailView(Blog ${blogId}, Post ${postId})`);
         },
 
-        showEditor(bid, pid) {
-            console.log(`Aufruf von presenter.showEditor(${blogId}, ${postId})`);
+        showPostEditor(bid, pid) {
+            console.log(`Aufruf von presenter.showPostEditor(Blog ${blogId}, Post ${postId})`);
         }
     };
 })();

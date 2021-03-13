@@ -39,12 +39,14 @@ const model = (function () {
         this.lastChange = change;
         this.releaseDate = release;
         this.URL = URL;
-        this.setFormatDates = function (long) {
-            this.shortDate = formatDate(long, false);
-            this.longDate = formatDate(long, true);
-        };
+    }    
+    Blog.prototype = {
+        constructor: Blog,
+        setFormatDates(date) {
+            //this.shortDate = formatDate(date, false);
+            //this.longDate = formatDate(date, true);
+        }
     }
-
     function Post(id, bid, title, change, release, content, comments) {
         this.id = id;
         this.bid = bid;
@@ -53,10 +55,13 @@ const model = (function () {
         this.releaseDate = release;
         this.postContent = content;
         this.commentCount = comments;
-        this.setFormatDates = function (long) {
-            this.shortDate = formatDate(long, false);
-            this.longDate = formatDate(long, true);
-        };
+    }
+    Post.prototype = {
+        constructor: Post,
+        setFormatDates(date) {
+            this.shortDate = formatDate(date, false);
+            this.longDate = formatDate(date, true);
+        }
     }
 
     function Comment(id, bid, pid, name, change, release, content) {
@@ -67,10 +72,13 @@ const model = (function () {
         this.lastChange = change;
         this.releaseDate = release;
         this.commentContent = content;
-        this.setFormatDates = function (long) {
-            this.shortDate = formatDate(long, false);
-            this.longDate = formatDate(long, true);
-        };
+    }
+    Comment.prototype = {
+        constructor: Comment,
+        setFormatDates(date) {
+            this.shortDate = formatDate(date, false);
+            this.longDate = formatDate(date, true);
+        }
     }
 
     // Oeffentliche Methoden
@@ -83,7 +91,7 @@ const model = (function () {
         isLoggedIn() {
             return loggedIn;
         },
-        // Liefert den angemeldeten Nutzer mit allen Infos Nssra
+        // Liefert den angemeldeten Nutzer mit allen Infos
         getSelf(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -118,19 +126,17 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                let arrB=[];
-                arrB.push(new Blog(result.id, result.name, result.posts.totalItems, result.updated, result.published, result.url));
-                callback(arrB);
+                let blog = new Blog(result.id, result.name, result.updated, result.published, result.url);
+                callback(blog);
             });
         },
 
-        // Liefert Array mit allen Posts zu der  Blog-Id bid Toni
+        // Liefert Array mit allen Posts zu der  Blog-Id bid
         getAllPostsOfBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
                 'path': pathBlogs + "/" + bid + '/posts'
             });
-
             request.execute((result) => {
                 let arrP = [];   // Array erstellen
                 for (let p of result.items) {// Posts einfügen
@@ -143,7 +149,7 @@ const model = (function () {
             });
         },
 
-        // Liefert Array mit dem Post mit der Post-Id pid im Blog mit der Blog-Id bid Toni
+        // Liefert Array mit dem Post mit der Post-Id pid im Blog mit der Blog-Id bid
         getPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -151,25 +157,21 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                let arrP = [];
                 let post = new Post(result.id, result.blog.id, result.title, result.updated, result.published, result.content, result.replies.totalItems);
-                arrP.push(post);
-                callback(arrP);
+                callback(post);
             });
         },
 
-        // Liefert alle Kommentare zu dem Post mit der Post-Id pid Toni
-        // im Blog mit der Blog-Id bid 
+        // Liefert alle Kommentare zu dem Post mit der pid im Blog mit der bid 
         getAllCommentsOfPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
                 'path': pathBlogs + "/" + bid + '/posts/' + pid + "/comments"
             });
-
             request.execute((result) => {
                 if(result[0]!== undefined){
                 let arr = [];
-                for (let c of result.items) {
+                for (let c of result) {
                     arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
                 }
                 callback(arr);}
@@ -186,7 +188,6 @@ const model = (function () {
                 'method': 'DELETE',
                 'path': path
             });
-
             request.execute(callback);
         },
 

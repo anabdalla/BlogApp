@@ -14,82 +14,76 @@
     </head> 
     <body>
         <!--Grundriss überall gleich start-->
-        <header id="header_content"></header> // wird zu Beginn in initPage() befüllt
+        <header id="header_content"></header> <!-- wird zu Beginn in initPage() befüllt -->
+        <hr>
         <main id="main_content"></main>
-        <footer id="footer_content"></footer> // wird zu Beginn in initPage() befüllt
+        <hr>
+        <footer id="footer_content"></footer> <!--// wird zu Beginn in initPage() befüllt -->
         <!--Grundriss überall gleich zuende -->
 
-        <!--Template Sektion Beginn-->
+        <!--Templates Beginn-->
         <div id="templates" hidden>
-            <!-- abgemeldet-->
             <div id="abgemeldet">
-                <button id="sign-in-or-out-button"> Anmelden </button>
+                <button id="sign-in-or-out-button" type="button"> Anmelden </button>
             </div>
-            <hr>
 
             <div id="header_angemeldet">
-                <button id="sign-in-or-out-button"> Abmelden </button>
+                <button id="sign-in-or-out-button" type="button"> Abmelden </button>
                 <p>angemeldet als: %userName <p>
-                <nav>
+                <nav> 
+                    <p> Meine Blogs: </p>
                     <ul> 
-                        <li>%blogName (%postCount Posts)</li> 
+                        <li data-path="/overview/%id">
+                            %blogName (%postCount Posts)
+                        </li> 
                     </ul>
                 </nav>
-                // vllt. nav um die ul setzen?
-                <section> 
-                    <ul>
-                        <li><p>%blogName</p></li>
-                        <li>Posts: %postCount</li>
-                        <li>letzte Änderung: %lastChange (Kurzfassung)</li>
-                        <li>Erscheinungsdatum: %releaseDate (Kurzfassung)</li>
-                        <li> <a href="url">%URL</a></li>
-                    </ul>
-                </section>
+                <p> aktueller Blog: </p>
+                <ul>
+                    <li>%blogName</li>
+                    <li>Posts: %postCount</li>
+                    <li>letzte Änderung: %lastChange (Kurzfassung)</li>
+                    <li>Erscheinungsdatum: %releaseDate (Kurzfassung)</li>
+                    <li> <a href="%URL">%URL</a></li>
+                </ul>
             </div>
             <hr>
 
             <!-- Startseite - eingeloggt -->
             <div id="Blog-Übersicht">
-                // Button evtl. in das div mit den anderen Buttons verschieben?
-                <button name = "add"><img src="./pic/icons8-plus-64.png" alt="add"></button>
                 <!--Navigation an Postinhalten mit Kuzinfo gelistet-->
-                <nav>
-                    <ul>
-                        <li>
-                            <article>
-                                <header>
-                                    <h3>%postName</h3>
-                                    <p>erstellt:%relaseDate (Kurzfassung)</p>
-                                    <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
-                                    <p>Kommentare: %commentCount</p>
-                                </header>
-                                <section></section> // ??? sollen die Meta-Daten im header bleiben oder in die section?
-                                <footer>
-                                    <nav> // hier werden die Buttons zur Laufzeit eingesetzt
-                                    </nav>
-                                </footer>
-                            </article>
-                        </li>
-                    </ul>
-                </nav>
+                <p>Übersicht: %blogName</p>
+                <ul>
+                    <li data-path="/detail/%id">
+                        <article>
+                            <header>
+                                <h3>%postName</h3>
+                                <p>erstellt:%relaseDate (Kurzfassung)</p>
+                                <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
+                                <p>Kommentare: %commentCount</p>
+                            </header>
+                            <footer>
+                                <nav> 
+                                </nav>
+                            </footer>
+                        </article>
+                    </li>
+                </ul>
+                <button type="button" data-path="/edit"> Post hinzufügen </button>
             </div>
-            <hr>
 
             <!--Buttons-->
-            <div id="Buttons"> // Button zum anlegen eines Posts steht momentan noch oben
+            <div id="Buttons"> <!-- Button zum anlegen eines Posts steht momentan noch oben -->
                 <ul>                             
-                    <li><button data-path="/view/%id"><img src="./pic/icons8-view-64.png" alt="view"></button> </li>
-                    <li><button data-path="/edit/%id"><img src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
-                    <li><button id="post1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button></li>
+                    <li><button data-path="/view/%id"><img class="icon" src="./pic/icons8-view-64.png" alt="view"></button> </li>
+                    <li><button data-path="/edit/%id"><img class="icon" src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
+                    <li><button id="post1" data-action="delete"><img class="icon" src="./pic/icons8-trash-64.png" alt="delete"></button></li>
                 </ul>
-
             </div>
-            <hr>
 
             <!-- Grundriss für die Postansicht-->
             <div id="Detailansicht">
                 <article id="post">
-                    <!--Header innerhalb der main section-->
                     <header>
                         <p>%postName<p>
                         <p>Post erstellt am: %relaseDate</p>
@@ -104,7 +98,7 @@
                 </article>
                 <p>Kommentare: %commentCount</p>
                 <article>
-                    // Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)?
+                    <!-- Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)? -->
                     <section>
                         %commentContent
                     </section>
@@ -122,18 +116,49 @@
                         </ul>
                     </footer>
                 </article>
+                <a href="/overview/%bid">Blog-Übersicht</a>
             </div>
-            <hr>
 
             <div id="footer_angemeldet">
                 <footer>
                     <p>  Account: %userName</p>
-                    <p>  URL: <a href="url">%userAddress</a> <</p>
+                    <p>  URL: <a href="%userAddress">%userAddress</a> </p>
                 </footer>
             </div>
-            <hr>
+            
+<!--            <div id = "edit">
+                <h3>Mitarbeiter Editor</h3>
+                <form class="form" id="%id">
+                    <ul>
+                        <li>
+                            <label for="name">Name:</label>
+                            <input id="name" type="text" name="name" value="%name">
+                        </li>
+                        <li>
+                            <label for="birth">Geburtsdatum:</label>
+                            <input type="date" id="birth">
+                        </li>
+                        <li>
+                            <label for="job">Job:</label>
+                            <input type="text" id="job" name="job" value = "%job" list="jobs">
+                            <datalist id="jobs">
+                            </datalist>
+                        </li>
+                        <li>
+                            <label for="email">Email:</label>
+                            <input id="email" type="email" name="email" value = "%email">
+                        </li>
+                        <li>
+                            <nav>
+                            <button type="button" value="cancel" data-path = "/overview"> Abbrechen </button>
+                            <button type="submit" value="save" data-action = "save"> Speichern </button>
+                            </nav>
+                        </li>
+                    </ul>
+                </form>
+            </div>-->
         </div>
-        <!--Template Sektion ende-->
+        <!--Templates Ende-->
     </body>
 </html>
 
