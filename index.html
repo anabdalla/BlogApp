@@ -91,10 +91,13 @@
                         </nav>
                     </header>
                     <section>
-                        %postContent
+                         %postContent
                     </section>
                     <p>Kommentare: %commentCount</p>
                 </article>
+                <ul>
+                    <li>
+                <p>Kommentare: %commentCount</p>
                 <article id="comment">
                     <!-- Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)? -->
                     <section>
@@ -114,7 +117,7 @@
                         </ul>
                     </footer>
                 </article>
-                <button id="buttonOverview" data-path="/overview/%bid">Blog-Übersicht</button>
+                <a href="/overview/%bid">Blog-Übersicht</a>
             </div>
 
             <div id="footer_angemeldet">

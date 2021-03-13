@@ -155,6 +155,16 @@ const presenter = (function () {
                 let page = detailView.render(post);
                 replace('main_content', page);
             });
+                if (!init)
+                initPage();  
+                model.getPost(bid,pid, (post) => {
+                    let page = detailViewC.render(post);
+                    page += detailViewP.render(post);
+                  model.getAllCommentsOfPost(bid,pid,(comments)=>{
+                      page+=CommentViewC.render(comments);
+                      replace('main_content', page);
+                  });                     
+                });
         },
 
         showPostEditor(bid, pid) {
