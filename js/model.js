@@ -59,8 +59,8 @@ const model = (function () {
     Post.prototype = {
         constructor: Post,
         setFormatDates(date) {
-            this.shortDate = formatDate(date, false);
-            this.longDate = formatDate(date, true);
+         //   this.shortDate = formatDate(date, false);
+         //   this.longDate = formatDate(date, true);
         }
     }
 
@@ -76,8 +76,8 @@ const model = (function () {
     Comment.prototype = {
         constructor: Comment,
         setFormatDates(date) {
-            this.shortDate = formatDate(date, false);
-            this.longDate = formatDate(date, true);
+          //  this.shortDate = formatDate(date, false);
+          //  this.longDate = formatDate(date, true);
         }
     }
 

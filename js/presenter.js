@@ -46,16 +46,26 @@ const presenter = (function () {
             model.getAllPostsOfBlog(latestChange.id, (posts) => {
                 let pageMain = blogOverview.render(latestChange, posts);
                 replace('main_content', pageMain);
+////             //Probe Detailview
+//               model.getPost(latestChange.id, posts[0].id, (post) => {
+//                    let pageMain = detailView.render(post);
+//                    replace('main_content', pageMain);
+//                });
+                // zur Blogübersicht des Blogs navigieren
+                // router.navigateToPage('/overview/${blogId}');
             });
+
+
+            // Eventhandler setzen
+            // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
+            let head = document.getElementById('header_content');
+            head.addEventListener("click", handleClicks);
+            let main = document.getElementById('main_content');
+            main.addEventListener("click", handleClicks);
+            let foot = document.getElementById('footer_content');
+            foot.addEventListener("click", handleClicks);
+            init = true; // Initialisierung ist erfolgt
         });
-        // Eventhandler setzen
-        let head = document.getElementById('header_content');
-        head.addEventListener("click", handleClicks);
-        let main = document.getElementById('main_content');
-        main.addEventListener("click", handleClicks);
-        let foot = document.getElementById('footer_content');
-        foot.addEventListener("click", handleClicks);
-        init = true; // Initialisierung ist erfolgt
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
@@ -71,7 +81,7 @@ const presenter = (function () {
         let page = document.getElementById("abgemeldet").cloneNode(true);
         page.removeAttribute("id");
         replace('main_content', page);
-        // die Bereiche header und footer sollen leer sein
+        // die Bereiche header und footer sollen leer sein, auch wenn sie vorher befüllt waren!
         document.getElementById('header_content').innerHTML = "";
         document.getElementById('footer_content').innerHTML = "";
     }
@@ -91,8 +101,7 @@ const presenter = (function () {
         // behandelte Click-Möglichkeiten: a-Tags, Buttons, Listenelemente
         switch (event.target.tagName) {
             case "A":
-                event.preventDefault();
-                source = event.target;
+                router.handleNavigationEvent(event);
                 break;
             case "BUTTON":
                 source = event.target;
@@ -116,8 +125,6 @@ const presenter = (function () {
             // Wenn vorher noch nichts angezeigt wurde, d.h. beim Einloggen
             if (model.isLoggedIn()) { // Wenn der Nutzer eingeloggt ist
                 initPage();
-                // zur Blogübersicht des Blogs navigieren
-                //router.navigateToPage("/blog-overview/%bid");
             }
             if (!model.isLoggedIn()) {
                 loginPage();
@@ -130,6 +137,7 @@ const presenter = (function () {
             if (!init)
                 initPage();  // Fehlervermeidung
             model.getBlog(bid, (blog) => {
+                blogId = bid;
                 model.getAllPostsOfBlog(blog.id, (posts) => {
                     let page = blogOverview.render(blog, posts);
                     replace('main_content', page);
@@ -139,10 +147,29 @@ const presenter = (function () {
 
         showDetailView(bid, pid) {
             console.log(`Aufruf von presenter.showDetailView(Blog ${blogId}, Post ${postId})`);
+            if (!init)
+                initPage();
+            model.getPost(bid, pid, (post) => {
+                blogId = bid;
+                postId = pid;
+                let page = detailView.render(post);
+                replace('main_content', page);
+            });
         },
 
         showPostEditor(bid, pid) {
             console.log(`Aufruf von presenter.showPostEditor(Blog ${blogId}, Post ${postId})`);
+        },
+        
+        // Aktion für Löschen eines Posts
+        deletePost(bid, pid) {
+            model.deletePost(bid, pid, (removed) => {
+                alert(`Der Post wurde gelöscht!`);
+                // Bei Löschen auf der Detail-Seite zurück zur Übersicht
+                if (detail) {
+                    router.navigateToPage("/overview/%bid");
+                }
+            });
         }
     };
 })();

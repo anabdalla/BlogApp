@@ -58,7 +58,7 @@
                         <article>
                             <header>
                                 <h3>%postName</h3>
-                                <p>erstellt:%relaseDate (Kurzfassung)</p>
+                                <p>erstellt:%releaseDate (Kurzfassung)</p>
                                 <p>zuletzt geändert: %lastChange (Kurzfassung)</p>
                                 <p>Kommentare: %commentCount</p>
                             </header>
@@ -75,9 +75,8 @@
             <!--Buttons-->
             <div id="Buttons"> <!-- Button zum anlegen eines Posts steht momentan noch oben -->
                 <ul>                             
-                    <li><button data-path="/view/%id"><img class="icon" src="./pic/icons8-view-64.png" alt="view"></button> </li>
                     <li><button data-path="/edit/%id"><img class="icon" src="./pic/icons8-edit-64.png" alt="edit"></button> </li>
-                    <li><button id="post1" data-action="delete"><img class="icon" src="./pic/icons8-trash-64.png" alt="delete"></button></li>
+                    <li><button data-id="%id" data-action="delete"><img class="icon" src="./pic/icons8-trash-64.png" alt="delete"></button></li>
                 </ul>
             </div>
 
@@ -86,18 +85,17 @@
                 <article id="post">
                     <header>
                         <p>%postName<p>
-                        <p>Post erstellt am: %relaseDate</p>
+                        <p>Post erstellt am: %releaseDate</p>
                         <p>letzte Änderung: %lastChange</p>
                         <nav>
-                            <!--Buttons platzhalter-->
                         </nav>
                     </header>
                     <section>
                         %postContent
                     </section>
+                    <p>Kommentare: %commentCount</p>
                 </article>
-                <p>Kommentare: %commentCount</p>
-                <article>
+                <article id="comment">
                     <!-- Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)? -->
                     <section>
                         %commentContent
@@ -116,7 +114,7 @@
                         </ul>
                     </footer>
                 </article>
-                <a href="/overview/%bid">Blog-Übersicht</a>
+                <button id="buttonOverview" data-path="/overview/%bid">Blog-Übersicht</button>
             </div>
 
             <div id="footer_angemeldet">
@@ -125,38 +123,38 @@
                     <p>  URL: <a href="%userAddress">%userAddress</a> </p>
                 </footer>
             </div>
-            
-<!--            <div id = "edit">
-                <h3>Mitarbeiter Editor</h3>
-                <form class="form" id="%id">
-                    <ul>
-                        <li>
-                            <label for="name">Name:</label>
-                            <input id="name" type="text" name="name" value="%name">
-                        </li>
-                        <li>
-                            <label for="birth">Geburtsdatum:</label>
-                            <input type="date" id="birth">
-                        </li>
-                        <li>
-                            <label for="job">Job:</label>
-                            <input type="text" id="job" name="job" value = "%job" list="jobs">
-                            <datalist id="jobs">
-                            </datalist>
-                        </li>
-                        <li>
-                            <label for="email">Email:</label>
-                            <input id="email" type="email" name="email" value = "%email">
-                        </li>
-                        <li>
-                            <nav>
-                            <button type="button" value="cancel" data-path = "/overview"> Abbrechen </button>
-                            <button type="submit" value="save" data-action = "save"> Speichern </button>
-                            </nav>
-                        </li>
-                    </ul>
-                </form>
-            </div>-->
+
+            <!--            <div id = "edit">
+                            <h3>Mitarbeiter Editor</h3>
+                            <form class="form" id="%id">
+                                <ul>
+                                    <li>
+                                        <label for="name">Name:</label>
+                                        <input id="name" type="text" name="name" value="%name">
+                                    </li>
+                                    <li>
+                                        <label for="birth">Geburtsdatum:</label>
+                                        <input type="date" id="birth">
+                                    </li>
+                                    <li>
+                                        <label for="job">Job:</label>
+                                        <input type="text" id="job" name="job" value = "%job" list="jobs">
+                                        <datalist id="jobs">
+                                        </datalist>
+                                    </li>
+                                    <li>
+                                        <label for="email">Email:</label>
+                                        <input id="email" type="email" name="email" value = "%email">
+                                    </li>
+                                    <li>
+                                        <nav>
+                                        <button type="button" value="cancel" data-path = "/overview"> Abbrechen </button>
+                                        <button type="submit" value="save" data-action = "save"> Speichern </button>
+                                        </nav>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>-->
         </div>
         <!--Templates Ende-->
     </body>

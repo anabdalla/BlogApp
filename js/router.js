@@ -48,14 +48,22 @@ const router = (function () {
         presenter.showStartPage();
     });
 
-    router.addRoute('blogOverview', function (url) {
+    router.addRoute('overview', function(url) {
         // Get the index of which blog we want to show and call the appropriate function.
-        var blogId = url.split('blogOverview/')[1].trim();
-        //presenter.blogId = id;
-        presenter.showBlogOverview(blogId);
+        var bid = url.split('overview/')[1].trim();
+        presenter.blogId = bid;
+        presenter.showBlogOverview(bid);
     });
     
-    //TODO detailview, editor
+    router.addRoute('detail', function (url) {
+        bid = url.split('overview/')[1].trim();
+        presenter.blogId = bid;
+        var pid = url.split('detail/')[1].trim();       
+        presenter.postId = pid;
+        presenter.showDetailView(presenter.blogId, presenter.postId);
+    });
+    
+    //TODO /edit
 
     if (window) {
         window.addEventListener('popstate', (event) => {

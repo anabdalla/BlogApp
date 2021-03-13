@@ -60,6 +60,24 @@ const header = {
 
 const blogOverview = {
     render (blog, posts) {
+        // Lokaler Event Handler für Aktion Delete
+        function handleDelete(event) {
+            let source = event.target.closest('LI');
+            if (source) {
+                let action = source.dataset.action;
+                // Bei action delete und bestätigter Rückfrage 
+                if (action === "delete" && confirm(`Wollen Sie den Post wirklich löschen?`)) {
+                    // Löschen des Posts aus dem DOM
+                    let post = source.parentElement.closest('LI');
+                    post.remove();
+                    let pid = source.dataset.id;
+                    let bid = source.dataset.bid;
+                    // Aufruf der zugehörigen Presenter-Methode
+                    presenter[action](bid, pid);
+                }
+            }
+        }
+        
         // TODO Editor
         console.log("View: render von blogOverview");
         let page = document.getElementById('Blog-Übersicht').cloneNode(true);
@@ -71,6 +89,7 @@ const blogOverview = {
         // die Liste mit den Posts erstellen
         let ul = page.querySelector("ul");
         let liTempl = ul.firstElementChild;
+        helper.setNavButtons(liTempl);
         liTempl.remove();   // Template aus Clone entfernen
         for (let p of posts) {
             let li = liTempl.cloneNode(true);
@@ -78,9 +97,29 @@ const blogOverview = {
             helper.setDataInfo(ul, p);
         }
      // TODO lokalen Eventhandler setzen
-     //page.addEventListener("click", handleDelete);
+     page.addEventListener("click", handleDelete);
      return page;
     }
+};
+// TODO
+const detailView = {
+    // bekommt den Post übergeben
+    // nur zum ausprobieren
+    render (post) {
+        console.log("View: render von detailView");
+        presenter.postId=post.id;
+        let page = document.getElementById("Detailansicht").cloneNode(true);
+        page.removeAttribute("id");
+        // Postinfos einsetzen
+        let postInfo = document.getElementById("post").cloneNode(true);
+        postInfo.removeAttribute("id");
+        helper.setDataInfo(postInfo, post);
+        helper.setNavButtons(postInfo);
+        return page;
+        
+        // TODO comments einsetzen
+    }
+    
 };
 
 // Aus DEMO
@@ -207,5 +246,14 @@ const helper = {
             cont = cont.replace(rexp, object[key]);
         }
         element.innerHTML = cont;
+    },
+    // Setzt die Navigations-Buttons in das Nav-Element des Templates in temp
+    setNavButtons(templ) {
+        // Klonen des Button-Komponententemplate
+        let buttons = document.getElementById("Buttons").cloneNode(true);
+        buttons.removeAttribute("id");
+        // Buttons in Navigation einsetzen
+        let nav = templ.querySelector("nav");
+        nav.append(buttons);
     }
 };
