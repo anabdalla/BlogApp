@@ -39,7 +39,7 @@ const model = (function () {
         this.lastChange = change;
         this.releaseDate = release;
         this.URL = URL;
-    }    
+    }
     Blog.prototype = {
         constructor: Blog,
         setFormatDates(date) {
@@ -59,8 +59,8 @@ const model = (function () {
     Post.prototype = {
         constructor: Post,
         setFormatDates(date) {
-         //   this.shortDate = formatDate(date, false);
-         //   this.longDate = formatDate(date, true);
+            //   this.shortDate = formatDate(date, false);
+            //   this.longDate = formatDate(date, true);
         }
     }
 
@@ -76,8 +76,8 @@ const model = (function () {
     Comment.prototype = {
         constructor: Comment,
         setFormatDates(date) {
-          //  this.shortDate = formatDate(date, false);
-          //  this.longDate = formatDate(date, true);
+            //  this.shortDate = formatDate(date, false);
+            //  this.longDate = formatDate(date, true);
         }
     }
 
@@ -111,9 +111,9 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                let arrB=[];
-                for(let b of result.items)
-                arrB.push(new Blog(b.id, b.name, b.posts.totalItems, b.updated, b.published, b.url));
+                let arrB = [];
+                for (let b of result.items)
+                    arrB.push(new Blog(b.id, b.name, b.posts.totalItems, b.updated, b.published, b.url));
                 callback(arrB);
             });
         },
@@ -140,10 +140,9 @@ const model = (function () {
             request.execute((result) => {
                 let arrP = [];   // Array erstellen
                 for (let p of result.items) {// Posts einfügen
-                    if (p !== undefined) {
-                        // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
-                        arrP.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
-                    }
+
+                    // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
+                    arrP.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
                 }
                 callback(arrP);  // gewünschte Funktion auf Array ausführen
             });
@@ -169,12 +168,13 @@ const model = (function () {
                 'path': pathBlogs + "/" + bid + '/posts/' + pid + "/comments"
             });
             request.execute((result) => {
-                if(result[0]!== undefined){
-                let arr = [];
-                for (let c of result) {
-                    arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
+                if (result[0] !== undefined) {
+                    let arr = [];
+                    for (let c of result) {
+                        arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
+                    }
+                    callback(arr);
                 }
-                callback(arr);}
             });
         },
 

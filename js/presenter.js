@@ -46,16 +46,23 @@ const presenter = (function () {
             model.getAllPostsOfBlog(latestChange.id, (posts) => {
                 let pageMain = blogOverview.render(latestChange, posts);
                 replace('main_content', pageMain);
-////             //Probe Detailview
-//               model.getPost(latestChange.id, posts[0].id, (post) => {
-//                    let pageMain = detailView.render(post);
-//                    replace('main_content', pageMain);
-//                });
-                // zur Blogübersicht des Blogs navigieren
-                // router.navigateToPage('/overview/${blogId}');
+
+
+//////             //Probe Detailview Comments werden irgendwie nicht ein geblendet !!!!
+//             model.getPost(latestChange.id, posts[0].id, (post) => {  
+//                 pageMain = detailView.render(post);
+//                replace('main_content', pageMain);
+//             model.getAllCommentsOfPost(latestChange.id, post.id,(comments)=> {
+//            pageMain = detailViewC.render(comments);
+//                    replace('main_content', pageMain);   
+//                     router.navigateToPage('/overview/${blogId}');
+//                      // zur Blogübersicht des Blogs navigieren
+//               
+//
+//        });   
+//              
+//           });
             });
-
-
             // Eventhandler setzen
             // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
             let head = document.getElementById('header_content');
@@ -150,27 +157,20 @@ const presenter = (function () {
             if (!init)
                 initPage();
             model.getPost(bid, pid, (post) => {
-                blogId = bid;
-                postId = pid;
-                let page = detailView.render(post);
-                replace('main_content', page);
-            });
-                if (!init)
-                initPage();  
-                model.getPost(bid,pid, (post) => {
-                    let page = detailViewC.render(post);
-                    page += detailViewP.render(post);
-                  model.getAllCommentsOfPost(bid,pid,(comments)=>{
-                      page+=CommentViewC.render(comments);
-                      replace('main_content', page);
-                  });                     
+                pageMain = detailView.render(post);
+                replace('main_content', pageMain);
+                model.getAllCommentsOfPost(post.bid, post.id, (comments) => {
+                    pageMain = detailViewC.render(comments);
+                    replace('main_content', pageMain);
                 });
+
+            });
         },
 
         showPostEditor(bid, pid) {
             console.log(`Aufruf von presenter.showPostEditor(Blog ${blogId}, Post ${postId})`);
         },
-        
+
         // Aktion für Löschen eines Posts
         deletePost(bid, pid) {
             model.deletePost(bid, pid, (removed) => {

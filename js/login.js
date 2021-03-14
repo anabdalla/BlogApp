@@ -26,7 +26,7 @@
         gapi.client.init({
             'discoveryDocs': [discoveryUrl],
             'clientId': '26901513547-8ae4n8ut9sh5l7839qjsknf4nminls6k.apps.googleusercontent.com',
-            // eigene: 'clientId': '262642101719-u6gm3h5f2napq4vdlo24c2556thoier3.apps.googleusercontent.com',
+            //eigene 'clientId': '262642101719-u6gm3h5f2napq4vdlo24c2556thoier3.apps.googleusercontent.com',
             'scope': SCOPE
         }).then(function () {
             GoogleAuth = gapi.auth2.getAuthInstance();
@@ -67,17 +67,17 @@
             router.navigateToPage(window.location.pathname);
         } else {
             $('#sign-in-or-out-button').html('Anmelden');
-            $('#auth-status').html('Abgemeldet bei Google'); 
+            $('#auth-status').html('Abgemeldet bei Google');
             console.log("---------setSigninStatus: Abgemeldet---------");
             model.setLoggedIn(false);
-            router.navigateToPage('/'); 
+            router.navigateToPage('/');
         }
     }
 
     function updateSigninStatus(isSignedIn) {
         setSigninStatus();
     }
-    
+
     // After Loading, handleClientLoad is called
     window.addEventListener("load", handleClientLoad);
 

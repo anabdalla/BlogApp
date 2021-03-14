@@ -105,70 +105,47 @@ const blogOverview = {
 const detailView = {
     // bekommt den Post übergeben
     // nur zum ausprobieren
-    render (post) {
-        console.log("View: render von detailView");
+    render (post) { 
+        
         presenter.postId=post.id;
-        let page = document.getElementById("Detailansicht").cloneNode(true);
+        let page = document.getElementById('post').cloneNode(true);
+        // Entfernen des Id-Attributs (keine Dopplungen!)
         page.removeAttribute("id");
-        // Postinfos einsetzen
-        let postInfo = document.getElementById("post").cloneNode(true);
-        postInfo.removeAttribute("id");
-        helper.setDataInfo(postInfo, post);
-        helper.setNavButtons(postInfo);
+      
+        let cont = page.innerHTML;
+        cont = cont.replace("%postName", post.name).replace("%releaseDate", post.relaseDate).replace("%lastChange", post.lastChange).replace("%commentCount", post.commentCount).replace("%postContent",post.postContent);
+        page.innerHTML = cont;
         return page;
-        
-        // TODO comments einsetzen
     }
     
 };
 
-const detailViewC={
+const detailViewC = {
     
-    render(post){
-         let page = document.getElementById('post').cloneNode(true);
-        page.removeAttribute("id");
-        // Blognamen einsetzen
-        let cont = page.innerHTML;
-        let h= page.querySelector("header");
-        let hTempl = h.firstElementChild;
-         hTemplate.remove();
-        cont = helper.setDataInfo(h,post)
-        page.innerHTML = cont;
-        return page;
-    }
-}
-
-const detailViewP = {
-    render (blog, posts) {
-        // 
-           let page = document.getElementById('post').cloneNode(true);
-        page.removeAttribute("id");
-        
-        let cont = page.innerHTML;
-        let h= page.querySelector("section");
-       
-        cont = helper.setDataInfo(h,post)
-        page.innerHTML = cont;
-       
-     return page;
-    }
-};
-
-const CommentViewC={
     render(comments){
-        let page= document.getElementById('comment').cloneNode(true);
-        page.remove("id");
-        let cont= page.innerHTML;
-          let ul= page.querySelector("ul");
-          liTemplate=ul.fistElementChild;
-            hTemplate.remove();
-             for (let c of comments) {
+        
+      // Klonen des Template-Knotens (und aller Kinder) für die Seite
+        let page = document.getElementById('comment').cloneNode(true);
+        page.removeAttribute("id");
+        // die List mit den abonnierten Blogs erstellen
+        let ul = page.querySelector("ul");
+        let liTempl = ul.firstElementChild;
+        // Template-Daten entfernen
+        liTempl.remove();
+        // Erstellen eines li-Elements für jeden Blog
+        for (let c of comments) {
             let li = liTempl.cloneNode(true);
+            // in ul einfügen
             ul.appendChild(li);
-            helper.seDataInfo(ul,c);
+            helper.setDataInfo(ul, c);
         }
-return page;
-}}
+        
+     page.addEventListener("click", handleDelete);
+        return page;
+    }
+};
+
+
 // helper enthält Methoden, die in mehreren Views benötigt werden.
 const helper = {
     // Ersetzt alle %bezeichner Texte in element durch die 

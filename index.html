@@ -91,32 +91,36 @@
                         </nav>
                     </header>
                     <section>
-                         %postContent
+                        %postContent
                     </section>
                     <p>Kommentare: %commentCount</p>
                 </article>
-                <ul>
-                    <li>
-                <p>Kommentare: %commentCount</p>
-                <article id="comment">
+                <div id="comment">
+                    <p>Kommentare: %commentCount</p>
                     <!-- Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)? -->
-                    <section>
-                        %commentContent
-                    </section>
-                    <footer>
-                        <!--Metacontent des Kommentars im Footer der Kommentsection section -->
-                        <ul>
-                            <li>
-                                <p>geschrieben von: %writer</p>
-                                <p>letzte Änderung: %lastChange</p>
-                                <p>erstellt: %releaseDate</p>
-                                <nav>
-                                    <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
-                                </nav>
-                            </li>
-                        </ul>
-                    </footer>
-                </article>
+                    <ul>
+                        <li>
+                            <article>
+                                <section>
+                                    %commentContent
+                                </section>
+                                <footer>
+                                    <!--Metacontent des Kommentars im Footer der Kommentsection section -->
+                                    <ul>
+                                        <li>
+                                            <p>geschrieben von: %writer</p>
+                                            <p>letzte Änderung: %lastChange</p>
+                                            <p>erstel  presenter.postId=post.id;lt: %releaseDate</p>
+                                            <nav>
+                                                <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
+                                            </nav>
+                                        </li>
+                                    </ul>
+                                </footer>
+                            </article>
+                        </li>
+                    </ul>
+                </div>
                 <a href="/overview/%bid">Blog-Übersicht</a>
             </div>
 
