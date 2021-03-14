@@ -58,6 +58,7 @@ const header = {
 
 const blogOverview = {
     render (blog, posts) {
+        presenter.blogId=post.bid;
         // Lokaler Event Handler für Aktion Delete
         function handleDelete(event) {
             let source = event.target.closest('LI');
@@ -103,8 +104,10 @@ const blogOverview = {
 const detailView = {
     // bekommt den Post übergeben
     // nur zum ausprobieren
-    render (post) {       
-        presenter.postId=post.id;
+    render (post,comments) { 
+        
+        presenter.blogId=post.bid;
+        
         let page = document.getElementById('post').cloneNode(true);
         // Entfernen des Id-Attributs (keine Dopplungen!)
         page.removeAttribute("id");
@@ -120,25 +123,26 @@ const detailView = {
 const detailViewC = {
     
     render(comments){
-        
+        presenter.blogId=comments[0].id;
       // Klonen des Template-Knotens (und aller Kinder) für die Seite
-        let page = document.getElementById('comment').cloneNode(true);
-        page.removeAttribute("id");
+        let cpage = document.getElementById('comment').cloneNode(true);
+        cpage.removeAttribute("id");
         // die List mit den abonnierten Blogs erstellen
-        let ul = page.querySelector("ul");
-        let liTempl = ul.firstElementChild;
+        let cul = cpage.querySelector("ul");
+        let cliTempl = cul.firstElementChild;
         // Template-Daten entfernen
-        liTempl.remove();
+        cliTempl.remove();
         // Erstellen eines li-Elements für jeden Blog
         for (let c of comments) {
-            let li = liTempl.cloneNode(true);
+            let cli = cliTempl.cloneNode(true);
             // in ul einfügen
-            ul.appendChild(li);
-            helper.setDataInfo(ul, c);
+            cul.appendChild(cli);
+            helper.setDataInfo(cul, c);
         }
         
      page.addEventListener("click", handleDelete);
-        return page;
+       
+        return cpage;
     }
 };
 

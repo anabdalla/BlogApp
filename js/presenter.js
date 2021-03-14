@@ -40,9 +40,24 @@ const presenter = (function () {
             // MAIN INITIALISIEREN:
             // BlogOverview des Blogs latestChange in 'main_content' einfügen
             model.getAllPostsOfBlog(latestChange.id, (posts) => {
-                let pageMain = blogOverview.render(latestChange, posts);
-                replace('main_content', pageMain);
+              let pageMain = blogOverview.render(latestChange, posts);
+               replace('main_content', pageMain);
+                //Probe Detailview Comments werden irgendwie nicht ein geblendet !!!!
+                model.getPost(latestChange.id, posts[0].id, (post) => {
+                model.getAllCommentsOfPost(latestChange.id, post.id, (comments) => {
+                      
+
+                    pageMain = detailView.render(post, comments);
+                       replace('main_content', pageMain);
+                       
+
+                   });
+
+                });
+                        
+                
             });
+            
             // Eventhandler setzen
             // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
             let head = document.getElementById('header_content');
@@ -149,10 +164,13 @@ const presenter = (function () {
                 model.getAllCommentsOfPost(post.bid, post.id, (comments) => {
                     pageMain = detailViewC.render(comments);
                     replace('main_content', pageMain);
-                });
-
-            });
-        },
+                    model.getAllCommentsOfPost(latestChange.id, post.id, (comments) => {
+                        pageMain = detailViewC.render(comments);
+                        replace('main_content', pageMain);
+                        router.navigateToPage('/overview/${blogId}');            
+        });
+    });
+});},
 
         showPostEditor(bid, pid) {
             console.log(`Aufruf von presenter.showPostEditor(Blog ${blogId}, Post ${postId})`);
