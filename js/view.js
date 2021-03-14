@@ -103,7 +103,6 @@ const blogOverview = {
 const detailView = {
     render(post, comments) {
         console.log("View: render von detailView");
-        console.log(comments);
         let page = document.getElementById('Detailansicht').cloneNode(true);
         page.removeAttribute("id");
         // Post-Abschnitt befüllen
@@ -113,11 +112,9 @@ const detailView = {
         // Liste mit Kommentaren befüllen
         let ul = page.querySelectorAll("ul")[1]; // mittlerweile ist eine ul in der nav mit den Buttons!!
         let liTempl = ul.firstElementChild;
-        console.log(liTempl);
         liTempl.remove();   // Template aus Clone entfernen
-        if (comments.items !== undefined) {
-            for (let c of comments.items) {
-                console.log("Kommentar");
+        if (comments[0] !== undefined) {
+            for (let c of comments) {
                 let li = liTempl.cloneNode(true);
                 ul.appendChild(li);
                 helper.setDataInfo(ul, c);
