@@ -82,9 +82,9 @@
 
             <!-- Grundriss für die Postansicht-->
             <div id="Detailansicht">
-                <article id="post">
+                <article id="post"> 
+                    <h3>%postName</h3>
                     <header>
-                        <p>%postName<p>
                         <p>Post erstellt am: %releaseDate</p>
                         <p>letzte Änderung: %lastChange</p>
                         <nav>
@@ -94,34 +94,20 @@
                         %postContent
                     </section>
                     <p>Kommentare: %commentCount</p>
+                    <button data-path="/overview/%bid">Blog-Übersicht</button>
                 </article>
-                    <p>Kommentare: %commentCount</p>
-                    <!-- Muss der commentContent nicht auch in eine Liste, um zur Laufzeit eingesetzt zu werden (mehrere Kommentare zum Post)? -->
-                    <nav id="comment">
-                        <ul>
-                        <li>
-                            <article>
-                                <section>
-                                    %commentContent
-                                </section>
-                                <footer>
-                                    <!--Metacontent des Kommentars im Footer der Kommentsection section -->
-                                    <ul>
-                                        <li>
-                                            <p>geschrieben von: %writer</p>
-                                            <p>letzte Änderung: %lastChange</p>
-                                            <p>erstel  presenter.postId=post.id;lt: %releaseDate</p>
-                                            <nav>
-                                                <button id="com1" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
-                                            </nav>
-                                        </li>
-                                    </ul>
-                                </footer>
-                            </article>
-                        </li>
-                    </ul>
+                <ul>
+                    <li>
+                        <h4>Kommentar:</h4>
+                        %commentContent
+                        <p>geschrieben von: %writer</p>
+                        <p>letzte Änderung: %lastChange</p>
+                        <p>erste Veröffentlichung: %releaseDate</p>
                         <nav>
-                <a href="/overview/%bid">Blog-Übersicht</a>
+                            <button id="deleteComment" data-action="delete"><img src="./pic/icons8-trash-64.png" alt="delete"></button>
+                        </nav>
+                    </li>
+                </ul>
             </div>
 
             <div id="footer_angemeldet">

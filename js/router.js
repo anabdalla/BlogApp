@@ -69,3 +69,5 @@ const router = (function () {
         router.handleRouting(); // erstes Aufrufen der Startseite
     }
 })();
+
+

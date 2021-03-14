@@ -29,9 +29,9 @@ const presenter = (function () {
         model.getAllBlogs((blogs) => {
             // den zuletzt aktualisierten Blog finden (für die BlogInfo)
             let latestChange = blogs[0];
-            for (let b of blogs) { 
-                if (b.lastChange < latestChange.lastChange) { 
-                    latestChange = b; 
+            for (let b of blogs) {
+                if (b.lastChange < latestChange.lastChange) {
+                    latestChange = b;
                     blogId = b.id;
                 }
             }
@@ -40,34 +40,19 @@ const presenter = (function () {
             // MAIN INITIALISIEREN:
             // BlogOverview des Blogs latestChange in 'main_content' einfügen
             model.getAllPostsOfBlog(latestChange.id, (posts) => {
-              let pageMain = blogOverview.render(latestChange, posts);
-               replace('main_content', pageMain);
-                //Probe Detailview Comments werden irgendwie nicht ein geblendet !!!!
-                model.getPost(latestChange.id, posts[0].id, (post) => {
-                model.getAllCommentsOfPost(latestChange.id, post.id, (comments) => {
-                      
-
-                    pageMain = detailView.render(post, comments);
-                       replace('main_content', pageMain);
-                       
-
-                   });
-
-                });
-                        
-                
+                let pageMain = blogOverview.render(latestChange, posts);
+                replace('main_content', pageMain);
             });
-            
-            // Eventhandler setzen
-            // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
-            let head = document.getElementById('header_content');
-            head.addEventListener("click", handleClicks);
-            let main = document.getElementById('main_content');
-            main.addEventListener("click", handleClicks);
-            let foot = document.getElementById('footer_content');
-            foot.addEventListener("click", handleClicks);
-            init = true; // Initialisierung ist erfolgt
         });
+        // Eventhandler setzen
+        // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
+        let head = document.getElementById('header_content');
+        head.addEventListener("click", handleClicks);
+        let main = document.getElementById('main_content');
+        main.addEventListener("click", handleClicks);
+        let foot = document.getElementById('footer_content');
+        foot.addEventListener("click", handleClicks);
+        init = true; // Initialisierung ist erfolgt
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
@@ -145,9 +130,9 @@ const presenter = (function () {
                     replace('main_content', pageMain);
                     // header-Bereich anpassen
                     model.getAllBlogs((blogs) => {
-                    let pageHeader = header.render(blogs, blog);
-                    replace('header_content', pageHeader);
-            });
+                        let pageHeader = header.render(blogs, blog);
+                        replace('header_content', pageHeader);
+                    });
                 });
             });
         },
@@ -158,19 +143,14 @@ const presenter = (function () {
             console.log(`Aufruf von presenter.showDetailView(Blog ${blogId}, Post ${postId})`);
             if (!init)
                 initPage();
-            model.getPost(bid, pid, (post) => {
-                let pageMain = detailView.render(post);
-                replace('main_content', pageMain);
-                model.getAllCommentsOfPost(post.bid, post.id, (comments) => {
-                    pageMain = detailViewC.render(comments);
+            model.getPost(blogId, postId, (post) => {
+                console.log("Post: " + pid);
+                model.getAllCommentsOfPost(blogId, postId, (comments) => {
+                    let pageMain = detailView.render(post, comments);
                     replace('main_content', pageMain);
-                    model.getAllCommentsOfPost(latestChange.id, post.id, (comments) => {
-                        pageMain = detailViewC.render(comments);
-                        replace('main_content', pageMain);
-                        router.navigateToPage('/overview/${blogId}');            
-        });
-    });
-});},
+                });
+            });
+        },
 
         showPostEditor(bid, pid) {
             console.log(`Aufruf von presenter.showPostEditor(Blog ${blogId}, Post ${postId})`);

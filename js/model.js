@@ -140,7 +140,6 @@ const model = (function () {
             request.execute((result) => {
                 let arrP = [];   // Array erstellen
                 for (let p of result.items) {// Posts einfügen
-
                     // relevante Attributnamen aus Bloggerdoc auslesen und hier "umwandeln"
                     arrP.push(new Post(p.id, p.blog.id, p.title, p.updated, p.published, p.content, p.replies.totalItems));
                 }
@@ -168,13 +167,17 @@ const model = (function () {
                 'path': pathBlogs + "/" + bid + '/posts/' + pid + "/comments"
             });
             request.execute((result) => {
-                if (result[0] !== undefined) {
+                if (result.items !== undefined) {
                     let arr = [];
-                    for (let c of result) {
-                        arr.push(new Comment(c.id, c.blog.id, c.post.id, c.author, c.updated, c.published, c.content));
-                    }
+                    result.items.forEach(function(item) {
+                        arr.push(new Comment(item.id, item.blog.id, item.post.id, item.author.displayName, item.updated, item.published, item.content));
+                    });
                     callback(arr);
+                } else {
+                    console.log("Keine Kommentare");
+                    callback(result);
                 }
+
             });
         },
 

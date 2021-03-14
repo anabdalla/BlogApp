@@ -38,7 +38,7 @@ const header = {
             ul.appendChild(li);
             // %blogName und %postCount ersetzen
             helper.setDataInfo(ul, b);
-        }       
+        }
         // BlogInfo in die ul einsetzen
         let cont = page.innerHTML;
         // TODO geht noch nicht - zuerst die Kurzfassung der Daten einsetzen
@@ -57,8 +57,8 @@ const header = {
 };
 
 const blogOverview = {
-    render (blog, posts) {
-        presenter.blogId=post.bid;
+    render(blog, posts) {
+        presenter.blogId = blog.id;
         // Lokaler Event Handler für Aktion Delete
         function handleDelete(event) {
             let source = event.target.closest('LI');
@@ -76,7 +76,6 @@ const blogOverview = {
                 }
             }
         }
-        presenter.blogId = blog.id;
         // TODO Editor
         console.log("View: render von blogOverview");
         let page = document.getElementById('Blog-Übersicht').cloneNode(true);
@@ -95,58 +94,38 @@ const blogOverview = {
             ul.appendChild(li);
             helper.setDataInfo(ul, p);
         }
-     // TODO lokalen Eventhandler setzen
-     page.addEventListener("click", handleDelete);
-     return page;
-    }
-};
-// TODO
-const detailView = {
-    // bekommt den Post übergeben
-    // nur zum ausprobieren
-    render (post,comments) { 
-        
-        presenter.blogId=post.bid;
-        
-        let page = document.getElementById('post').cloneNode(true);
-        // Entfernen des Id-Attributs (keine Dopplungen!)
-        page.removeAttribute("id");
-      
-        let cont = page.innerHTML;
-        cont = cont.replace("%postName", post.name).replace("%releaseDate", post.relaseDate).replace("%lastChange", post.lastChange).replace("%commentCount", post.commentCount).replace("%postContent",post.postContent);
-        page.innerHTML = cont;
+        // TODO lokalen Eventhandler setzen
+        page.addEventListener("click", handleDelete);
         return page;
     }
-    
 };
 
-const detailViewC = {
-    
-    render(comments){
-        presenter.blogId=comments[0].id;
-      // Klonen des Template-Knotens (und aller Kinder) für die Seite
-        let cpage = document.getElementById('comment').cloneNode(true);
-        cpage.removeAttribute("id");
-        // die List mit den abonnierten Blogs erstellen
-        let cul = cpage.querySelector("ul");
-        let cliTempl = cul.firstElementChild;
-        // Template-Daten entfernen
-        cliTempl.remove();
-        // Erstellen eines li-Elements für jeden Blog
-        for (let c of comments) {
-            let cli = cliTempl.cloneNode(true);
-            // in ul einfügen
-            cul.appendChild(cli);
-            helper.setDataInfo(cul, c);
+const detailView = {
+    render(post, comments) {
+        console.log("View: render von detailView");
+        console.log(comments);
+        let page = document.getElementById('Detailansicht').cloneNode(true);
+        page.removeAttribute("id");
+        // Post-Abschnitt befüllen
+        let postArt = page.querySelector("article");
+        helper.setNavButtons(postArt);
+        helper.setDataInfo(postArt, post);
+        // Liste mit Kommentaren befüllen
+        let ul = page.querySelectorAll("ul")[1]; // mittlerweile ist eine ul in der nav mit den Buttons!!
+        let liTempl = ul.firstElementChild;
+        console.log(liTempl);
+        liTempl.remove();   // Template aus Clone entfernen
+        if (comments.items !== undefined) {
+            for (let c of comments.items) {
+                console.log("Kommentar");
+                let li = liTempl.cloneNode(true);
+                ul.appendChild(li);
+                helper.setDataInfo(ul, c);
+            }
         }
-        
-     page.addEventListener("click", handleDelete);
-       
-        return cpage;
+        return page;
     }
 };
-
-
 // helper enthält Methoden, die in mehreren Views benötigt werden.
 const helper = {
     // Ersetzt alle %bezeichner Texte in element durch die 
