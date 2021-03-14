@@ -56,11 +56,8 @@ const router = (function () {
     });
 
     router.addRoute('detail', function (url) {
-        bid = url.split('overview/')[1].trim();
-        presenter.blogId = bid;
         var pid = url.split('detail/')[1].trim();
-        presenter.postId = pid;
-        presenter.showDetailView(presenter.blogId, presenter.postId);
+        presenter.showDetailView(presenter.blogId, pid);
     });
 
     //TODO /edit
@@ -72,5 +69,3 @@ const router = (function () {
         router.handleRouting(); // erstes Aufrufen der Startseite
     }
 })();
-
-

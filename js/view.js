@@ -21,8 +21,6 @@ const footer = {
 };
 
 const header = {
-    // render-Methode liefert das befüllte Header-Template zurück
-    // ABER die BlogInfo des aktuellen Blogs fehlt noch!
     render(blogs, blog) { // bekommt Array mit Elementen vom Typ Blog und dem Blog für die BlogInfo
         console.log("View: render von header");
         // Klonen des Template-Knotens (und aller Kinder) für die Seite
@@ -52,7 +50,7 @@ const header = {
         helper.setDataInfo(page, blog);
         //  %userName einsetzen
         cont = page.innerHTML;
-        cont = cont.replace("%userName", presenter.owner);  // hakt noch
+        cont = cont.replace("%userName", presenter.owner);
         page.innerHTML = cont;
         return page;
     }
@@ -77,7 +75,7 @@ const blogOverview = {
                 }
             }
         }
-        
+        presenter.blogId = blog.id;
         // TODO Editor
         console.log("View: render von blogOverview");
         let page = document.getElementById('Blog-Übersicht').cloneNode(true);
@@ -105,8 +103,7 @@ const blogOverview = {
 const detailView = {
     // bekommt den Post übergeben
     // nur zum ausprobieren
-    render (post) { 
-        
+    render (post) {       
         presenter.postId=post.id;
         let page = document.getElementById('post').cloneNode(true);
         // Entfernen des Id-Attributs (keine Dopplungen!)

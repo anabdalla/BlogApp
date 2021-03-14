@@ -16,52 +16,32 @@ const presenter = (function () {
     function initPage() {
         console.log("Presenter: Aufruf von initPage()");
         document.getElementById('main_content').innerHTML = "";
-        // FOOTER INITIALISIEREN:
+        // FOOTER INITIALISIEREN: bleibt bis zum Logout gleich
         // Nutzer abfragen und an render-Methode des Footers übergeben, Namen als owner speichern
         model.getSelf((result) => {
-            owner = result.displayName; // scheint noch nicht zu klappen -> Laufzeitproblem??
+            owner = result.displayName;
             console.log(`Presenter: Nutzer*in ${owner} hat sich angemeldet.`);
-            // den einzusetzenden div-Knoten von der render-Methode zurückliefern lassen
             let pageFooter = footer.render(result);
-            // Footer befüllen
             replace('footer_content', pageFooter);
         });
         // HEADER INITIALISIEREN:
-        // Blogs abfragen und an die render-Methode des Headers übergeben
+        // Blogs abfragen und die BlogInfo mit dem zuletzt aktualisierten Blog befüllen
         model.getAllBlogs((blogs) => {
             // den zuletzt aktualisierten Blog finden (für die BlogInfo)
             let latestChange = blogs[0];
-            for (let b of blogs) { // dazu müssen die Blogs verglichen werden
-                if (b.lastChange < latestChange.lastChange) { // prüfen, ob Aktualisierung jünger als die des bisher gespeicherten Blogs ist
-                    latestChange = b; // wenn ja, den aktuelleren Blog in Variable speichern
+            for (let b of blogs) { 
+                if (b.lastChange < latestChange.lastChange) { 
+                    latestChange = b; 
                     blogId = b.id;
                 }
             }
-            // den einzusetzenden div-Knoten von der render-Methode zurückliefern lassen
             let pageHeader = header.render(blogs, latestChange);
-            // ausgefüllten Header einsetzen
             replace('header_content', pageHeader);
             // MAIN INITIALISIEREN:
             // BlogOverview des Blogs latestChange in 'main_content' einfügen
             model.getAllPostsOfBlog(latestChange.id, (posts) => {
                 let pageMain = blogOverview.render(latestChange, posts);
                 replace('main_content', pageMain);
-
-
-//////             //Probe Detailview Comments werden irgendwie nicht ein geblendet !!!!
-//             model.getPost(latestChange.id, posts[0].id, (post) => {  
-//                 pageMain = detailView.render(post);
-//                replace('main_content', pageMain);
-//             model.getAllCommentsOfPost(latestChange.id, post.id,(comments)=> {
-//            pageMain = detailViewC.render(comments);
-//                    replace('main_content', pageMain);   
-//                     router.navigateToPage('/overview/${blogId}');
-//                      // zur Blogübersicht des Blogs navigieren
-//               
-//
-//        });   
-//              
-//           });
             });
             // Eventhandler setzen
             // bearbeitet die Navigationselemente, die Interaktionen sind in Methoden!
@@ -144,20 +124,27 @@ const presenter = (function () {
             if (!init)
                 initPage();  // Fehlervermeidung
             model.getBlog(bid, (blog) => {
-                blogId = bid;
+                // main-Bereich befüllen
                 model.getAllPostsOfBlog(blog.id, (posts) => {
-                    let page = blogOverview.render(blog, posts);
-                    replace('main_content', page);
+                    let pageMain = blogOverview.render(blog, posts);
+                    replace('main_content', pageMain);
+                    // header-Bereich anpassen
+                    model.getAllBlogs((blogs) => {
+                    let pageHeader = header.render(blogs, blog);
+                    replace('header_content', pageHeader);
+            });
                 });
             });
         },
 
         showDetailView(bid, pid) {
+            blogId = bid;
+            postId = pid;
             console.log(`Aufruf von presenter.showDetailView(Blog ${blogId}, Post ${postId})`);
             if (!init)
                 initPage();
             model.getPost(bid, pid, (post) => {
-                pageMain = detailView.render(post);
+                let pageMain = detailView.render(post);
                 replace('main_content', pageMain);
                 model.getAllCommentsOfPost(post.bid, post.id, (comments) => {
                     pageMain = detailViewC.render(comments);
