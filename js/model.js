@@ -16,7 +16,12 @@ const model = (function () {
     // Formatiert den Datum-String in date in zwei mögliche Datum-Strings: 
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
-    // -> Aufruf setFormatDates() in Prototypen
+    /* -> Aufruf setFormatDates() in Prototypen
+     * 
+     * @param {date} date
+     * @param {number} long
+     * @returns {void}
+     */
     function formatDate(date, long) {
         let newDate;
         var langfassung = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -31,7 +36,15 @@ const model = (function () {
         return newDate;
     }
 
-    // Konstruktoren für Daten-Objekte Blog, Post, Comment
+    /* Konstruktoren für Daten-Objekte Blog
+     * @param {number} id - id des Blogs
+     * @param {number} name - name des Blogs
+     * @param {number} count - Anzahl der angelegten Posts
+     * @param {date} change - Datum der letzten Änderung
+     * @param {date} release - Veröffentlichungsdatum
+     * @param {String} URL - Link zu google Blog ansicht
+     * @returns {modelmodel.Blog} Object Protoyp Blog
+     */
     function Blog(id, name, count, change, release, URL) {
         this.id = id;
         this.blogName = name;
@@ -47,6 +60,16 @@ const model = (function () {
             //this.longDate = formatDate(date, true);
         }
     }
+    /* Konstruktoren für Daten-Objekte Post
+     * @param {number} id - id des Posts
+     * @param {number}id - id des Blogs
+     * @param {String} count - Anzahl der angelegten Posts
+     * @param {date} change - Datum der letzten Änderung
+     * @param {date} release - Veröffentlichungsdatum
+     * @param {Object} content - Inhalt des Posts
+     * @param {number} comments- Anzahl der Kommentare des Posts
+     * @returns {modelmodel.Blog} Object Protoyp Post
+     */
     function Post(id, bid, title, change, release, content, comments) {
         this.id = id;
         this.bid = bid;
@@ -64,6 +87,17 @@ const model = (function () {
         }
     }
 
+/*
+ * Konstruktoren für Daten-Objekte Comment
+ * @param {number} id  - id des Kommentars
+ * @param {number} bid - id zum zugehörigen Blog
+ * @param {number} pid - id zum zugehörigen Post
+ * @param {String} name - unsername des Kommentierenden
+ * @param {date} change - Daum der letzten Änderung
+ * @param {date} release -  Veröffentlichungsdatum
+ * @param {Object} content - Inhalt des Kommentars
+ * @returns {modelmodel.Comment}
+ */
     function Comment(id, bid, pid, name, change, release, content) {
         this.id = id;
         this.bid = bid;
@@ -83,15 +117,26 @@ const model = (function () {
 
     // Oeffentliche Methoden
     return {
-        // Setter für loggedIn
+        /* Setter für loggedIn
+         * 
+         * @param {type} b - user?
+         * @returns {void}
+         */
         setLoggedIn(b) {
             loggedIn = b;
         },
-        // Getter für loggedIn
+        /* Getter für loggedIn
+         * 
+         * @returns {b|Boolean} - true, wenn eingelogged
+         */
         isLoggedIn() {
             return loggedIn;
         },
-        // Liefert den angemeldeten Nutzer mit allen Infos
+        /* Liefert den angemeldeten Nutzer mit allen Infos
+         * 
+         * @param {function} callback
+         * @returns {void}
+         */
         getSelf(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -103,7 +148,11 @@ const model = (function () {
             });
         },
 
-        // Liefert Array mit allen Blogs des angemeldeten Nutzers 
+        /* Liefert Array mit allen Blogs des angemeldeten Nutzers 
+         * 
+         * @param {function} callback
+         * @returns {void}
+         */
         getAllBlogs(callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -118,7 +167,12 @@ const model = (function () {
             });
         },
 
-        // Liefert Array mit dem Blog mit der Blog-Id bid 
+        /* Liefert Array mit dem Blog mit der Blog-Id bid
+         * 
+         * @param {number} bid
+         * @param {function} callback user Konstruktor
+         * @returns {void}
+         */ 
         getBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -131,7 +185,11 @@ const model = (function () {
             });
         },
 
-        // Liefert Array mit allen Posts zu der  Blog-Id bid
+        /* Liefert Array mit allen Posts zu der  Blog-Id bid
+        @param {number} bid (id des zugehörigen Blogs)
+ * @param {function} callback callbackfunktion (Postkonstruktor)
+ * @returns{void}
+ * */
         getAllPostsOfBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -147,7 +205,12 @@ const model = (function () {
             });
         },
 
-        // Liefert Array mit dem Post mit der Post-Id pid im Blog mit der Blog-Id bid
+        /* Liefert Array mit dem Post mit der Post-Id pid im Blog mit der Blog-Id bid
+         * @param {number} bid (id des zugehörigen Blogs)
+ * @param {number} pid  (id des auszuwählenden Posts)
+ * @param {function} callback callbackfunktion (Postkonstruktor)
+ * @returns{void}
+         * */
         getPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -160,7 +223,11 @@ const model = (function () {
             });
         },
 
-        // Liefert alle Kommentare zu dem Post mit der pid im Blog mit der bid 
+        /* Liefert alle Kommentare zu dem Post mit der pid im Blog mit der bid
+         * @param {number} bid (id des zugehörigen Blogs)
+ * @param {number} pid  (id des Posts)
+ * @param {function} callback callbackfunktion (Commentkonstruktor)
+ * @returns{void} */
         getAllCommentsOfPost(bid, pid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -181,9 +248,18 @@ const model = (function () {
             });
         },
 
-        // Löscht den Kommentar mit der Id cid zu Post mit der Post-Id pid 
-        // im Blog mit der Blog-Id bid 
-        // Callback wird ohne result aufgerufen
+
+       
+        
+          /*
+           *  // Löscht den Kommentar mit der Id cid zu Post mit der Post-Id pid 
+        im Blog mit der Blog-Id bid 
+        Callback wird ohne result aufgerufen
+ * @param {number} bid - id des zugehörigen Blogs
+ * @param {number} title - Titel des neuen Posts
+ * @param {number} cid - id des Kommentars)
+ * @param {function} callback - callbackfunktion Postkonstruktor
+ * @returns{void}*/
         deleteComment(bid, pid, cid, callback) {
             var path = pathBlogs + "/" + bid + '/posts/' + pid + "/comments/" + cid;
             console.log(path);
@@ -196,6 +272,12 @@ const model = (function () {
 
         // Fügt dem Blog mit der Blog-Id bid einen neuen Post 
         // mit title und content hinzu, Callback wird mit neuem Post aufgerufen
+   /*     
+ * @param {number} bid - id des zugehörigen Blogs
+ * @param {number} pid - id des zugehörigen Posts
+ * @param {Object} content - Content des zu erstellenden Posts
+ * @param {function} callback - callbackfunktion Postkonstruktor
+ * @returns{void}*/
         addNewPost(bid, title, content, callback) {
             var body = {
                 kind: "blogger#post",
@@ -215,8 +297,17 @@ const model = (function () {
             request.execute(callback);
         },
 
+
+
+
         // Aktualisiert title und content im geänderten Post 
         // mit der Post-Id pid im Blog mit der Blog-Id bid
+        /*
+ * @param {number} bid - id des Blogs
+ * @param {number} pid - id des zu bearbeiteten Posts
+ * @param {function} callback - Callbackfunktion Konstruktor für dasPostobjekt
+* @returns{void}
+         */
         updatePost(bid, pid, title, content, callback) {
             var body = {
                 kind: "blogger#post",
@@ -237,6 +328,14 @@ const model = (function () {
             request.execute(callback);
         },
 
+
+/*
+ * 
+ * @param {number} bid id des Blogs
+ * @param {number} pid id des zu löschenden Posts
+ * @param {function}  was wird hier übergeben?
+ * @returns{void}
+ */
         // Löscht den Post mit der Post-Id pid im Blog mit der Blog-Id bid, 
         // Callback wird ohne result aufgerufen
         deletePost(bid, pid, callback) {
